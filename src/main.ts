@@ -9,7 +9,6 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle("Welcome")
     .setVersion("1.0")
-    .addTag("welcome")
     .addBearerAuth({
       type: "http",
       scheme: "bearer",
