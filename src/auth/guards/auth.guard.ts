@@ -14,7 +14,6 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
     if (isPublic) {
-      console.log(isPublic)
       // 💡 See this condition
       return true;
     }
@@ -27,10 +26,8 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: jwtConstants.secret })
-      console.log(payload)
       request["user"] = payload;
     } catch (error) {
-      console.log(error)
       throw new ForbiddenException();
     }
 

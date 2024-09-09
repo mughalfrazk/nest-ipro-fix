@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { IsString } from "class-validator";
+import { ApiBody } from "@nestjs/swagger";
 
 export const SignInSchema = z.object({
   username: z.string(),
@@ -8,7 +9,7 @@ export const SignInSchema = z.object({
 
 export class SignInDto {
   @IsString()
-  username: string;
+  email: string;
 
   @IsString()
   password: string;

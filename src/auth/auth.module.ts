@@ -12,7 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
   imports: [UsersModule, JwtModule.register({
     global: true,
     secret: jwtConstants.secret,
-    signOptions: { expiresIn: '60m' }
+    signOptions: { expiresIn: '1d' }
   })],
   providers: [AuthService, {
     provide: APP_GUARD,
