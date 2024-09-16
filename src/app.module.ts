@@ -4,19 +4,24 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { Users } from './modules/users/users.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: "postgres",
-      host: "localhost",
-      port: 5432,
-      username: "postgres",
-      password: "Password123",
-      database: "ipro-fix",
-      synchronize: false,
-      logging: false,
-      entities: [Users],
+    ConfigModule.forRoot({
+      envFilePath: [".env.local", ".env"],
+      isGlobal: true
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: "postgres",
+        url: config.get("DATABASE_URL"),
+        synchronize: true,
+        logging: true,
+        entities: [Users],
+      })
     }),
     AuthModule,
     UsersModule
