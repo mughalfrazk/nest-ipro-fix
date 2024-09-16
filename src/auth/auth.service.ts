@@ -9,16 +9,18 @@ import { SignUpDto } from './dtos/sign-up.dto';
 export class AuthService {
   constructor(private usersService: UsersService, private jwtService: JwtService) { }
 
-  async signIn(email: string, pass: string): Promise<{ access_token: string }> {
+  async signIn(email: string, pass: string): Promise<{ id: string, email: string, access_token: string }> {
     const user = await this.usersService.findByEmail(email);
     const isMatch = await bcrypt.compare(pass, user.password)
 
     if (!isMatch) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Unathorized, Invalid credentials");
     }
 
     const payload = { sub: user.userId, email: user.email };
     return {
+      id: user.userId,
+      email: user.email,
       access_token: await this.jwtService.signAsync(payload)
     }
   }
