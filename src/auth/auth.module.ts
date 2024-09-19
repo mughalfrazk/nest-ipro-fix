@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { UsersModule } from 'src/modules/users/users.module';
 import { jwtConstants } from './constants';
 import { AuthGuard } from './guards/auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [UsersModule, JwtModule.register({
@@ -14,10 +15,16 @@ import { AuthGuard } from './guards/auth.guard';
     secret: jwtConstants.secret,
     signOptions: { expiresIn: '1d' }
   })],
-  providers: [AuthService, {
-    provide: APP_GUARD,
-    useClass: AuthGuard
-  }],
+  providers: [
+    AuthService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard
+    }, {
+      provide: APP_GUARD,
+      useClass: RolesGuard
+    }
+  ],
   controllers: [AuthController],
   exports: [AuthService]
 })
