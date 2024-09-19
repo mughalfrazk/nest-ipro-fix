@@ -4,10 +4,16 @@ import { Reflector } from "@nestjs/core";
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
 import { IS_PUBLIC_KEY } from "src/decorators/allow-anon.decorator";
 import { jwtConstants } from "../constants";
+import { UsersService } from "src/modules/users/users.service";
+import { JwtPayload } from "../dtos/jwt.dto";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService, private reflector: Reflector) { }
+  constructor(
+    private jwtService: JwtService,
+    private usersService: UsersService,
+    private reflector: Reflector
+  ) { }
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
@@ -25,8 +31,9 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, { secret: jwtConstants.secret })
-      request["user"] = payload;
+      const { sub }: JwtPayload = await this.jwtService.verifyAsync(token, { secret: jwtConstants.secret })
+      const userProfile = await this.usersService.findById(sub)
+      request.user = userProfile;
     } catch (error) {
       throw new ForbiddenException();
     }

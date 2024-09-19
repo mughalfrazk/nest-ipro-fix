@@ -2,10 +2,12 @@ import { ApiTags } from '@nestjs/swagger';
 import { BadRequestException, Body, Controller, Get, Post, Request } from '@nestjs/common';
 
 import { AllowAnon } from 'src/decorators/allow-anon.decorator';
+import { Users } from 'src/modules/users/users.entity';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dtos/sign-in.dto';
 import { SignUpDto } from './dtos/sign-up.dto';
 import { UsersService } from 'src/modules/users/users.service';
+import { Roles } from './decorators/roles.decorator';
 
 @ApiTags("Authentication")
 @Controller('auth')
@@ -30,9 +32,9 @@ export class AuthController {
     return this.authService.signUp(body)
   }
 
-
   @Get("profile")
-  getProfile(@Request() req) {
-    return req.user
+  @Roles(['admin'])
+  getProfile(@Request() { user }: { user: Users }) {
+    return user
   }
 }

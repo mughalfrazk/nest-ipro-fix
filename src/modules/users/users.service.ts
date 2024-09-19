@@ -3,18 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './users.entity';
 import { IsNull, Repository } from 'typeorm';
 
-export type User = any;
-
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(Users) private repo: Repository<Users>) { }
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmail(email: string): Promise<Users> {
     return this.repo.findOne({ where: { email, deleted_at: IsNull() } })
   }
 
   async findById(id: string) {
-    return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
+    return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ['role'] })
   }
 
   async create(user: Partial<Users>) {
@@ -23,4 +21,6 @@ export class UsersService {
     const entity = this.repo.create({ first_name, last_name, email, password })
     return this.repo.save(entity)
   }
+
+
 }
