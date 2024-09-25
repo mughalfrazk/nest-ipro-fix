@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Company } from "./company.entity";
 import { IsNull, Repository } from "typeorm";
 import { companySeeder } from "./company.seeder";
+import { CreateCompanyDto } from "./dto/create-company.dto";
 
 @Injectable()
 export class CompanyService {
@@ -14,6 +15,15 @@ export class CompanyService {
 
   async findById(id: string) {
     return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
+  }
+
+  async findAll() {
+    return this.repo.find();
+  }
+
+  async create(payload: CreateCompanyDto) {
+    const entity = this.repo.create(payload)
+    return this.repo.save(entity)
   }
 
   async seed() {

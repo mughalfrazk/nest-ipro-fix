@@ -1,19 +1,19 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { ApiHideProperty } from "@nestjs/swagger";
-
-import { Users } from "../users/users.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, UpdateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Company } from "../company/company.entity";
 
 @Entity()
-export class Role {
+export class Supplier {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ApiHideProperty()
-  @OneToMany(() => Users, users => users.role)
-  users: Users[]
+  @ManyToOne(() => Company, company => company.suppliers, { nullable: false })
+  company: Company
 
   @Column()
   name: string;
+
+  @Column()
+  description: string;
 
   @CreateDateColumn({
     type: 'timestamp',

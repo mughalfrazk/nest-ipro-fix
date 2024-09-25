@@ -10,7 +10,7 @@ export class AuthService {
   constructor(private usersService: UsersService, private jwtService: JwtService) { }
 
   async signIn(email: string, pass: string): Promise<{ id: string, email: string, access_token: string }> {
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findByEmailWithPassword(email);
     const isMatch = await bcrypt.compare(pass, user.password)
 
     if (!isMatch) {
