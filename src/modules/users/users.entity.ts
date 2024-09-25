@@ -1,8 +1,8 @@
 import { ApiHideProperty } from "@nestjs/swagger";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Role } from "../role/role.entity";
 import { Company } from "../company/company.entity";
-import { Exclude } from "class-transformer";
+import { Job } from "../job/job.entity";
 
 @Entity()
 export class Users {
@@ -15,6 +15,9 @@ export class Users {
   @ManyToOne(() => Company, company => company.users, { nullable: false })
   company: Company
 
+  @OneToMany(() => Job, job => job.technician)
+  jobs: Job[]
+
   @Column({ nullable: true })
   first_name: string;
 
@@ -24,8 +27,11 @@ export class Users {
   @Column()
   email: string;
 
+  @Column({ nullable: true })
+  phone: string;
+
   @ApiHideProperty()
-  @Column({ select: false })
+  @Column()
   password: string;
 
   @Column({ default: false })

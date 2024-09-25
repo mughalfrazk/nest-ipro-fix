@@ -2,7 +2,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { BadRequestException, Body, Controller, Get, Post, Request } from '@nestjs/common';
 
 import { AllowAnon } from 'src/decorators/allow-anon.decorator';
-import { Users } from 'src/modules/users/users.entity';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dtos/sign-in.dto';
 import { SignUpDto } from './dtos/sign-up.dto';
@@ -33,8 +32,8 @@ export class AuthController {
   }
 
   @Get("profile")
-  @Roles(['admin'])
-  getProfile(@Request() { user }: { user: Users }) {
+  @Roles(['super_admin'])
+  getProfile(@Request() { user }) {
     return user
   }
 }

@@ -8,11 +8,15 @@ export class UsersService {
   constructor(@InjectRepository(Users) private repo: Repository<Users>) { }
 
   async findByEmail(email: string): Promise<Users> {
-    return this.repo.findOne({ where: { email, deleted_at: IsNull() } })
+    return this.repo.findOne({ where: { email, deleted_at: IsNull() }, relations: ['role'] })
+  }
+
+  async findByEmailWithPassword(email: string): Promise<Users> {
+    return this.repo.findOne({ select: ['id', 'email', 'password', 'first_name', 'last_name'], where: { email, deleted_at: IsNull() }, relations: ['role'] })
   }
 
   async findById(id: string) {
-    return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ['role'] })
+    return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ['role', 'company'] })
   }
 
   async create(user: Partial<Users>) {
