@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { JobService } from "./job.service";
 import { CreateJobDto } from "./dto/create-job.dto";
@@ -11,9 +11,15 @@ import { Roles } from "@/auth/decorators/roles.decorator";
 export class JobController {
   constructor(private jobService: JobService) { }
 
+  @Get()
+  @Roles(["super_admin", "technician"])
+  async getAll(@AuthUser() { company: { id } }: Users) {
+    return this.jobService.getAllCompanyJobs(id)
+  }
+
   @Post()
   @Roles(["super_admin", "receptionist"])
   async createNewJob(@Body() body: CreateJobDto, @AuthUser() user: Users) {
-    return this.jobService.create(body, user.company.id)
+    return await this.jobService.create(body, user.company.id)
   }
 }

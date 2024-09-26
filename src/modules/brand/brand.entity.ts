@@ -2,15 +2,18 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryG
 import { Issue } from "../issue/issue.entity";
 
 @Entity()
-export class ProblemType {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+export class Brand {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @OneToMany(() => Issue, issue => issue.problem_type)
+  @OneToMany(() => Issue, issue => issue.brand)
   issues: Issue[]
 
   @Column()
   name: string;
+
+  @Column()
+  description: string;
 
   @CreateDateColumn({
     type: 'timestamp',

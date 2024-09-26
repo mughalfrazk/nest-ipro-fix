@@ -19,6 +19,10 @@ import { Customer } from './modules/customer/customer.entity';
 import { Job } from './modules/job/job.entity';
 import { JobModule } from './modules/job/job.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { Brand } from './modules/brand/brand.entity';
+import { Issue } from './modules/issue/issue.entity';
+import { BrandModule } from './modules/brand/brand.module';
+import { IssueModule } from './modules/issue/issue.module';
 
 @Module({
   imports: [
@@ -34,7 +38,17 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
         url: config.get("DATABASE_URL"),
         synchronize: true,
         // logging: true,
-        entities: [Role, Company, Users, Supplier, ProblemType, Customer, Job],
+        entities: [
+          Role,
+          Company,
+          Users,
+          Supplier,
+          ProblemType,
+          Customer,
+          Job,
+          Brand,
+          Issue
+        ],
         namingStrategy: new SnakeNamingStrategy()
       })
     }),
@@ -45,7 +59,9 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
     SupplierModule,
     ProblemTypeModule,
     CustomerModule,
-    JobModule
+    JobModule,
+    BrandModule,
+    IssueModule
   ],
   providers: [AppService]
 })

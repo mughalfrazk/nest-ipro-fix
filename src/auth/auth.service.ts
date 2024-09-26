@@ -25,10 +25,10 @@ export class AuthService {
     }
   }
 
-  async signUp(body: SignUpDto) {
+  async signUp(body: SignUpDto, company_id: string) {
     const saltOrRounds = await bcrypt.genSalt();
     const password = await bcrypt.hash(body.password, saltOrRounds)
 
-    return this.usersService.create({ ...body, password })
+    return this.usersService.create({ ...body, password }, company_id)
   }
 }
