@@ -7,6 +7,8 @@ import { SignInDto } from './dtos/sign-in.dto';
 import { SignUpDto } from './dtos/sign-up.dto';
 import { UsersService } from 'src/modules/users/users.service';
 import { Roles } from './decorators/roles.decorator';
+import { AuthUser } from '@/decorators/auth-user.decorator';
+import { Users } from '@/modules/users/users.entity';
 
 @ApiTags("Authentication")
 @Controller('auth')
@@ -24,11 +26,11 @@ export class AuthController {
   }
 
   @Post("signup")
-  async createUser(@Body() body: SignUpDto) {
-    const user = await this.usersService.findByEmail(body.email)
-    if (!!user) throw new BadRequestException("Email already in use")
+  async createUser(@Body() body: SignUpDto, @AuthUser() user: Users) {
+    const userEntity = await this.usersService.findByEmail(body.email)
+    if (!!userEntity) throw new BadRequestException("Email already in use")
 
-    return this.authService.signUp(body)
+    return this.authService.signUp(body, user.company.id)
   }
 
   @Get("profile")
