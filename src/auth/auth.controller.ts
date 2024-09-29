@@ -20,15 +20,18 @@ export class AuthController {
 
   @AllowAnon()
   @Post("login")
-  signIn(@Body() body: SignInDto) {
+  async signIn(@Body() body: SignInDto) {
     const { email, password } = body;
+    const userEntity = await this.usersService.findByEmail(body.email)
+    if (!userEntity) throw new BadRequestException("User not found.")
+
     return this.authService.signIn(email, password)
   }
 
   @Post("signup")
   async createUser(@Body() body: SignUpDto, @AuthUser() user: Users) {
     const userEntity = await this.usersService.findByEmail(body.email)
-    if (!!userEntity) throw new BadRequestException("Email already in use")
+    if (!!userEntity) throw new BadRequestException("Email already in use.")
 
     return this.authService.signUp(body, user.company.id)
   }
