@@ -17,9 +17,9 @@ export class AppService {
 
   async runSeeders() {
     try {
-      // await this.roleService.seed()
-      // await this.companyService.seed()
-      // await this.problemTypeService.seed()
+      await this.roleService.seed()
+      await this.companyService.seed()
+      await this.problemTypeService.seed()
     } catch (error) { }
   }
 }
