@@ -1,13 +1,18 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Issue } from "../issue/issue.entity";
+
+import { Users } from "../users/users.entity";
+import { Job } from "../job/job.entity";
 
 @Entity()
 export class ProblemType {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @OneToMany(() => Issue, issue => issue.problem_type)
-  issues: Issue[]
+  @OneToMany(() => Users, users => users.speciality)
+  users: Users[]
+
+  @OneToMany(() => Job, job => job.problem_type)
+  jobs: Job[]
 
   @Column()
   name: string;

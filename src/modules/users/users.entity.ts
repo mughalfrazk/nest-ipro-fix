@@ -3,6 +3,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMan
 import { Role } from "../role/role.entity";
 import { Company } from "../company/company.entity";
 import { Job } from "../job/job.entity";
+import { ProblemType } from "../problem-type/problem-type.entity";
 
 @Entity()
 export class Users {
@@ -14,6 +15,9 @@ export class Users {
 
   @ManyToOne(() => Company, company => company.users, { nullable: false })
   company: Company
+
+  @ManyToOne(() => ProblemType, speciality => speciality.users, { nullable: true })
+  speciality: ProblemType
 
   @OneToMany(() => Job, job => job.technician)
   jobs: Job[]
@@ -31,7 +35,7 @@ export class Users {
   phone: string;
 
   @ApiHideProperty()
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column({ default: false })

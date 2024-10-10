@@ -8,6 +8,10 @@ import { roleSeeder } from "./role.seeder";
 export class RoleService {
   constructor(@InjectRepository(Role) private repo: Repository<Role>) { }
 
+  async findAll() {
+    return this.repo.find()
+  }
+
   async findByName(name: string): Promise<Role> {
     return this.repo.findOne({ where: { name, deleted_at: IsNull() } })
   }

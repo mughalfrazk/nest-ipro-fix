@@ -28,12 +28,14 @@ export class AuthController {
     return this.authService.signIn(email, password)
   }
 
-  @Post("signup")
+  @Post("create-user")
+  @Roles(["super_admin", "admin"])
   async createUser(@Body() body: SignUpDto, @AuthUser() user: Users) {
     const userEntity = await this.usersService.findByEmail(body.email)
     if (!!userEntity) throw new BadRequestException("Email already in use.")
 
-    return this.authService.signUp(body, user.company.id)
+    await this.authService.signUp(body, user.company.id)
+    return "User created successfully"
   }
 
   @Get("profile")

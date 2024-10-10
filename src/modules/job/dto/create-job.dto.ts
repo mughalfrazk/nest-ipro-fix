@@ -1,13 +1,24 @@
-import { CreateIssueDto } from "@/modules/issue/dto/create-issue.dto";
 import { Type } from "class-transformer";
-import { ArrayMinSize, IsArray, IsString, ValidateNested } from "class-validator";
+import { ArrayMinSize, IsArray, IsString, ValidateIf, ValidateNested } from "class-validator";
+
+import { CreateCustomerDto } from "@/modules/customer/dto/create-customer.dto";
+import { CreateIssueDto } from "@/modules/issue/dto/create-issue.dto";
 
 export class CreateJobDto {
   @IsString()
-  customerId: string;
+  technician_id: string;
 
   @IsString()
-  technicianId: string;
+  problem_type_id: string
+
+  @IsString()
+  @ValidateIf(j => !j.customer || j.customer_id)
+  customer_id: string;
+
+  @ValidateNested({ each: true })
+  @ValidateIf(j => !j.customer_id || j.customer)
+  @Type(() => CreateCustomerDto)
+  customer: CreateCustomerDto
 
   @IsArray()
   @ValidateNested({ each: true })

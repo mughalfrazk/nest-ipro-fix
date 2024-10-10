@@ -9,7 +9,7 @@ export class IssueService {
   constructor(@InjectRepository(Issue) private repo: Repository<Issue>) { }
 
   async create(payload: CreateIssueDto) {
-    const { name, model, quantity, charges, total, brand_id, problem_type_id, job_id } = payload;
+    const { name, model, quantity, charges, total, brand_id, job_id } = payload;
 
     const entity = this.repo.create({
       name,
@@ -19,9 +19,6 @@ export class IssueService {
       quantity,
       brand: {
         id: brand_id
-      },
-      problem_type: {
-        id: problem_type_id
       },
       job: {
         id: job_id

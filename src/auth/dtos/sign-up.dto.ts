@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength } from "class-validator";
+import { IsEmail, IsOptional, IsString, MinLength } from "class-validator";
 import { z } from "zod";
 
 export const SignUpSchema = z.object({
@@ -25,4 +25,8 @@ export class SignUpDto {
 
   @IsString()
   role_id: string;
+
+  @IsOptional()
+  @IsString()
+  speciality_id: string;
 }
