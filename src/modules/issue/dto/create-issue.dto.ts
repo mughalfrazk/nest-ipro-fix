@@ -20,9 +20,6 @@ export class CreateIssueDto {
   brand_id: number;
 
   @IsString()
-  problem_type_id: string;
-
-  @IsString()
   @IsOptional()
   job_id: string;
 }

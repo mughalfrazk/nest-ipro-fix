@@ -8,6 +8,14 @@ import { CreateCustomerDto } from "./dto/create-customer.dto";
 export class CustomerService {
   constructor(@InjectRepository(Customer) private repo: Repository<Customer>) { }
 
+  async findAll() {
+    return this.repo.find();
+  }
+
+  async findByNameOrPhone(name: string, phone: string) {
+    return this.repo.findOne({ where: [{ name }, { phone }] })
+  }
+
   async create(payload: CreateCustomerDto, companyId: string) {
     const { name, phone, company_name } = payload;
     const entity = this.repo.create({ name, phone, company_name, company: { id: companyId } })

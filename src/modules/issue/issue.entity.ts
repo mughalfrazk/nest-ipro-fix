@@ -14,12 +14,6 @@ export class Issue {
   @Column({ type: "uuid" })
   job_id: string;
 
-  @ManyToOne(() => ProblemType, problem_type => problem_type.issues, { nullable: false })
-  problem_type: ProblemType
-  
-  @Column({ type: "uuid" })
-  problem_type_id: string;
-
   @ManyToOne(() => Brand, brand => brand.issues, { nullable: false })
   brand: Brand
 

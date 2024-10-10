@@ -23,6 +23,8 @@ import { Brand } from './modules/brand/brand.entity';
 import { Issue } from './modules/issue/issue.entity';
 import { BrandModule } from './modules/brand/brand.module';
 import { IssueModule } from './modules/issue/issue.module';
+import { JobStatus } from './modules/job-status/job-status.entity';
+import { JobStatusModule } from './modules/job-status/job-status.module';
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import { IssueModule } from './modules/issue/issue.module';
           Supplier,
           ProblemType,
           Customer,
+          JobStatus,
           Job,
           Brand,
           Issue
@@ -59,6 +62,7 @@ import { IssueModule } from './modules/issue/issue.module';
     SupplierModule,
     ProblemTypeModule,
     CustomerModule,
+    JobStatusModule,
     JobModule,
     BrandModule,
     IssueModule

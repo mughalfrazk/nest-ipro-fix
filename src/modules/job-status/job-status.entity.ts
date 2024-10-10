@@ -1,19 +1,16 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Issue } from "../issue/issue.entity";
+import { Job } from "../job/job.entity";
 
 @Entity()
-export class Brand {
+export class JobStatus {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => Issue, issue => issue.brand)
-  issues: Issue[]
+  @OneToMany(() => Job, job => job.job_status)
+  jobs: Job[]
 
   @Column()
   name: string;
-
-  @Column({ nullable: true })
-  description: string;
 
   @CreateDateColumn({
     type: 'timestamp',
