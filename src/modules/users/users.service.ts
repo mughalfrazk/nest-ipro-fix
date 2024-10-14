@@ -20,8 +20,6 @@ export class UsersService {
       where.speciality = { id: speciality_id }
     }
 
-    console.log(where)
-
     return this.repo.find({ where })
   }
 

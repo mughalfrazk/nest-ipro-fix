@@ -35,6 +35,8 @@ export class JobController {
       if (customerEntity) throw new BadRequestException("Customer already exist.")
     }
 
+    console.log("createNewJob: ", body)
+
     return await this.jobService.create(body, job_status.id, company.id)
   }
 }

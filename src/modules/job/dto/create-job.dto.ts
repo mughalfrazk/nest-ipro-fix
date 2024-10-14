@@ -1,11 +1,12 @@
 import { Type } from "class-transformer";
-import { ArrayMinSize, IsArray, IsString, ValidateIf, ValidateNested } from "class-validator";
+import { ArrayMinSize, IsArray, IsOptional, IsString, ValidateIf, ValidateNested } from "class-validator";
 
 import { CreateCustomerDto } from "@/modules/customer/dto/create-customer.dto";
 import { CreateIssueDto } from "@/modules/issue/dto/create-issue.dto";
 
 export class CreateJobDto {
   @IsString()
+  @IsOptional()
   technician_id: string;
 
   @IsString()
