@@ -10,7 +10,7 @@ export class JobService {
   constructor(@InjectRepository(Job) private repo: Repository<Job>) { }
 
   async getAllCompanyJobs(companyId: string) {
-    return this.repo.find({ where: { company: { id: companyId } }, relations: ["customer", "technician", "issues.brand"] })
+    return this.repo.find({ select: ["id", "customer"], where: { company: { id: companyId } }, relations: ["customer", "technician", "job_status", "issues"] })
   }
 
   async create(payload: CreateJobDto, job_status_id: number, company_id: string) {

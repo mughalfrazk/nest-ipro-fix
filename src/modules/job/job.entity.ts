@@ -21,7 +21,7 @@ export class Job {
   @ManyToOne(() => Customer, customer => customer.jobs, { cascade: ["insert"] })
   customer: Customer
 
-  @ManyToOne(() => Users, user => user.jobs)
+  @ManyToOne(() => Users, user => user.jobs, { nullable: false })
   technician: Users
 
   @ManyToOne(() => Company, company => company.jobs)
