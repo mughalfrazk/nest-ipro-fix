@@ -15,15 +15,28 @@ export class JobService {
 
   async create(payload: CreateJobDto, job_status_id: number, company_id: string) {
     const { customer_id, technician_id, problem_type_id, customer, issues } = payload
-    const entity = this.repo.create({
-      company: { id: company_id },
-      technician: { id: technician_id },
-      customer: customer_id ? { id: customer_id } : customer,
-      problem_type: { id: problem_type_id },
-      job_status: { id: job_status_id },
-      issues,
+    let entity
+    
+    if (technician_id) {
+      entity = this.repo.create({
+        company: { id: company_id },
+        technician: { id: technician_id },
+        customer: customer_id ? { id: customer_id } : customer,
+        problem_type: { id: problem_type_id },
+        job_status: { id: job_status_id },
+        issues,
+      })
+    } else {
+      entity = this.repo.create({
+        company: { id: company_id },
+        customer: customer_id ? { id: customer_id } : customer,
+        problem_type: { id: problem_type_id },
+        job_status: { id: job_status_id },
+        issues,
+      })
+    }
 
-    })
+
     return this.repo.save(entity)
   }
 }
