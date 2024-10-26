@@ -1,14 +1,18 @@
 import { ApiHideProperty } from "@nestjs/swagger";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Role } from "../role/role.entity";
 import { Company } from "../company/company.entity";
 import { Job } from "../job/job.entity";
 import { ProblemType } from "../problem-type/problem-type.entity";
+// import { TechinicianInfo } from "../technician-info/technician-info.entity";
 
 @Entity()
 export class Users {
   @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  // @OneToOne(() => TechinicianInfo, technician_info => technician_info.user)
+  // technician_info: TechinicianInfo
 
   @ManyToOne(() => Role, role => role.users, { nullable: false })
   role: Role
@@ -21,6 +25,12 @@ export class Users {
 
   @OneToMany(() => Job, job => job.technician)
   jobs: Job[]
+
+  @Column({ nullable: true })
+  target: number;
+
+  @Column({ nullable: true })
+  progress: number;
 
   @Column({ nullable: true })
   first_name: string;

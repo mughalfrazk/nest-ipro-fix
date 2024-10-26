@@ -10,7 +10,7 @@ export class UsersService {
 
   async findByRoleAndSpeciality(company_id: string, role_id?: string, speciality_id?: string): Promise<Users[]> {
     let where: FindOptionsWhere<Users> = {};
-    where.company = { id: company_id }
+    where.company = { id: company_id, deleted_at: IsNull() }
 
     if (role_id) {
       where.role = { id: role_id }
@@ -20,7 +20,7 @@ export class UsersService {
       where.speciality = { id: speciality_id }
     }
 
-    return this.repo.find({ where })
+    return this.repo.find({ where, relations: ["role", "company", "speciality"] })
   }
 
   async findByEmail(email: string): Promise<Users> {
@@ -41,6 +41,4 @@ export class UsersService {
     const entity = this.repo.create({ first_name, last_name, email, password, role: { id: role_id }, company: { id: company_id }, speciality: { id: speciality_id } })
     return this.repo.save(entity)
   }
-
-
 }
