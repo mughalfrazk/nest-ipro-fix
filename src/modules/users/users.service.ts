@@ -20,7 +20,7 @@ export class UsersService {
       where.speciality = { id: speciality_id }
     }
 
-    return this.repo.find({ where, relations: ["role", "company", "speciality"] })
+    return this.repo.find({ where, relations: ["role", "company", "speciality", "jobs"] })
   }
 
   async findByEmail(email: string): Promise<Users> {
@@ -32,7 +32,7 @@ export class UsersService {
   }
 
   async findById(id: string) {
-    return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ['role', 'company'] })
+    return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ['role', 'company', "speciality"] })
   }
 
   async create(user: SignUpDto, company_id: string) {
