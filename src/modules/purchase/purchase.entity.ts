@@ -1,28 +1,24 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
 import { Brand } from "../brand/brand.entity";
 import { Job } from "../job/job.entity";
 
 @Entity()
-export class Issue {
+export class Purchase {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => Job, job => job.issues, { nullable: false })
+  @ManyToOne(() => Brand, brand => brand.purchases, { nullable: false })
+  brand: Brand;
+  
+  @Column()
+  brand_id: number;
+
+  @ManyToOne(() => Job, job => job.purchases, { nullable: false })
   job: Job
 
   @Column({ type: "uuid" })
   job_id: string;
-
-  @ManyToOne(() => Brand, brand => brand.issues, { nullable: false })
-  brand: Brand
-
-  @Column()
-  brand_id: number;
-
-  @Column()
-  name: string;
-
+  
   @Column()
   model: string;
 
@@ -34,6 +30,9 @@ export class Issue {
 
   @Column()
   total: number;
+
+  @Column()
+  parts: string;
 
   @CreateDateColumn({
     type: 'timestamp',
