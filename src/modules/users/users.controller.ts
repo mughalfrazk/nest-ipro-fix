@@ -17,7 +17,7 @@ export class UsersController {
   @Get()
   @Roles(["super_admin", "admin"])
   async getByRole(@Query("role_id") role_id: string, @Query("speciality_id") speciality_id: string, @AuthUser() { company }) {
-    const users = await this.usersService.findByRoleAndSpeciality(company.id, role_id, speciality_id)
+    const users = await this.usersService.findByRoleAndSpecialityWithJobs(company.id, role_id, speciality_id)
     return users.map(user => ({ ...user, jobs: user.jobs.reduce(prev => prev + 1, 0) }))
   }
 

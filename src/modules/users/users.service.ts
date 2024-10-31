@@ -20,6 +20,21 @@ export class UsersService {
       where.speciality = { id: speciality_id }
     }
 
+    return this.repo.find({ where, relations: ["role", "company", "speciality"] })
+  }
+
+  async findByRoleAndSpecialityWithJobs(company_id: string, role_id?: string, speciality_id?: string): Promise<Users[]> {
+    let where: FindOptionsWhere<Users> = {};
+    where.company = { id: company_id, deleted_at: IsNull() }
+
+    if (role_id) {
+      where.role = { id: role_id }
+    }
+
+    if (speciality_id) {
+      where.speciality = { id: speciality_id }
+    }
+
     return this.repo.find({ where, relations: ["role", "company", "speciality", "jobs"] })
   }
 

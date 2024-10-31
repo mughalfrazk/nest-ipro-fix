@@ -25,6 +25,8 @@ import { BrandModule } from './modules/brand/brand.module';
 import { IssueModule } from './modules/issue/issue.module';
 import { JobStatus } from './modules/job-status/job-status.entity';
 import { JobStatusModule } from './modules/job-status/job-status.module';
+import { PurchaseModule } from './modules/purchase/purchase.module';
+import { Purchase } from './modules/purchase/purchase.entity';
 
 @Module({
   imports: [
@@ -50,7 +52,8 @@ import { JobStatusModule } from './modules/job-status/job-status.module';
           JobStatus,
           Job,
           Brand,
-          Issue
+          Issue,
+          Purchase
         ],
         namingStrategy: new SnakeNamingStrategy()
       })
@@ -65,7 +68,8 @@ import { JobStatusModule } from './modules/job-status/job-status.module';
     JobStatusModule,
     JobModule,
     BrandModule,
-    IssueModule
+    IssueModule,
+    PurchaseModule,
   ],
   providers: [AppService]
 })

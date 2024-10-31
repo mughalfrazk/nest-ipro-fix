@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 import { Customer } from "../customer/customer.entity";
 import { Users } from "../users/users.entity";
@@ -6,6 +6,7 @@ import { Company } from "../company/company.entity";
 import { Issue } from "../issue/issue.entity";
 import { JobStatus } from "../job-status/job-status.entity";
 import { ProblemType } from "../problem-type/problem-type.entity";
+import { Purchase } from "../purchase/purchase.entity";
 
 @Entity()
 export class Job {
@@ -29,4 +30,23 @@ export class Job {
 
   @OneToMany(() => Issue, issue => issue.job, { cascade: ["insert"] })
   issues: Issue[]
+
+  @OneToMany(() => Purchase, purchase => purchase.job, { cascade: ["insert"] })
+  purchases: Purchase[]
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  public created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  public updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at?: Date;
 }

@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Issue } from "../issue/issue.entity";
+import { Purchase } from "../purchase/purchase.entity";
 
 @Entity()
 export class Brand {
@@ -8,6 +9,9 @@ export class Brand {
 
   @OneToMany(() => Issue, issue => issue.brand)
   issues: Issue[]
+
+  @OneToMany(() => Purchase, purchase => purchase.brand)
+  purchases: Purchase[]
 
   @Column()
   name: string;
