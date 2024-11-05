@@ -44,6 +44,9 @@ export class Users {
   @Column({ nullable: true })
   phone: string;
 
+  @Column({ nullable: true })
+  address: string;
+
   @ApiHideProperty()
   @Column({ select: false })
   password: string;

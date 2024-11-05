@@ -9,6 +9,7 @@ export class RoleController {
 
   @Get()
   async getAll() {
-    return this.roleService.findAll()
+    const roles = await this.roleService.findAll()
+    return roles.filter(item => item.name !== "super_admin")
   }
 }

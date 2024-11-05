@@ -51,9 +51,20 @@ export class UsersService {
   }
 
   async create(user: SignUpDto, company_id: string) {
-    const { first_name, last_name, email, password, role_id, speciality_id } = user
-
-    const entity = this.repo.create({ first_name, last_name, email, password, role: { id: role_id }, company: { id: company_id }, speciality: { id: speciality_id } })
+    const { first_name, last_name, email, password, target, phone, role_id, speciality_id } = user
+    console.log(user)
+    // return
+    const entity = this.repo.create({ 
+      first_name,
+      last_name,
+      target: +target,
+      phone,
+      email,
+      password, 
+      role: { id: role_id },
+      company: { id: company_id },
+      speciality: { id: speciality_id }
+    })
     return this.repo.save(entity)
   }
 }
