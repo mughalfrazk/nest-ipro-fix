@@ -29,9 +29,14 @@ export class SignUpDto {
 
   @IsString()
   @IsOptional()
+  progress: number;
+
+  @IsString()
+  @IsOptional()
   phone: string;
 
   @IsString()
+  @IsOptional()
   address: string;
 
   @IsString()

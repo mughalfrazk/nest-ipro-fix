@@ -44,7 +44,7 @@ export class JobController {
       const customerEntity = await this.customerService.findByNameOrPhone(body.customer.name, body.customer.phone)
       if (customerEntity) throw new BadRequestException("Customer already exist.")
     }
-
+    
     return await this.jobService.create(body, job_status.id, company.id)
   }
 }

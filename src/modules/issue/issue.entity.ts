@@ -2,6 +2,8 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryG
 
 import { Brand } from "../brand/brand.entity";
 import { Job } from "../job/job.entity";
+import { Model } from "../model/model.entity";
+import { Problem } from "../problem/problem.entity";
 
 @Entity()
 export class Issue {
@@ -17,14 +19,20 @@ export class Issue {
   @ManyToOne(() => Brand, brand => brand.issues, { nullable: false })
   brand: Brand
 
+  @ManyToOne(() => Model, model => model.issues, { nullable: false })
+  model: Model
+
+  @ManyToOne(() => Problem, problem => problem.issues, { nullable: false })
+  problem: Problem
+
   @Column()
   brand_id: number;
 
   @Column()
-  name: string;
+  model_id: number;
 
   @Column()
-  model: string;
+  problem_id: number;
 
   @Column()
   quantity: number;
