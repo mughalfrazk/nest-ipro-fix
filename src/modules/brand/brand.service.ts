@@ -1,20 +1,25 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Brand } from "./brand.entity";
-import { Repository } from "typeorm";
+import { IsNull, Repository } from "typeorm";
 import { CreateBrand } from "./dto/create-brand.dto";
 import { brandSeeder } from "./brand.seeder";
+import { UpdateBrand } from "./dto/update-brand.dto";
 
 @Injectable()
 export class BrandService {
   constructor(@InjectRepository(Brand) private repo: Repository<Brand>) { }
 
   async findAll() {
-    return this.repo.find()
+    return this.repo.find({ where: { deleted_at: IsNull() } })
+  }
+
+  async findById(id: number) {
+    return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
   }
 
   async findByName(name: string) {
-    return this.repo.findOne({ where: { name } })
+    return this.repo.findOne({ where: { name, deleted_at: IsNull() } })
   }
 
   async create(payload: CreateBrand) {
@@ -22,6 +27,15 @@ export class BrandService {
 
     const entity = this.repo.create({ name, description })
     return this.repo.save(entity)
+  }
+
+  async update(id: number, payload: UpdateBrand) {
+    await this.repo.update(id, payload)
+    return this.findById(id)
+  }
+
+  async deleteRow(id: string) {
+    return this.repo.update(id, { deleted_at: new Date() })
   }
 
   async seed() {
