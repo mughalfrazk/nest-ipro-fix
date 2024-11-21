@@ -1,13 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { AppService } from './app.service';
+import { JobModule } from './modules/job/job.module';
+import { Brand } from './modules/brand/brand.entity';
+import { Issue } from './modules/issue/issue.entity';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { Users } from './modules/users/users.entity';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RoleModule } from './modules/role/role.module';
 import { Role } from './modules/role/role.entity';
-import { AppService } from './app.service';
 import { CompanyModule } from './modules/company/company.module';
 import { Company } from './modules/company/company.entity';
 import { SupplierModule } from './modules/supplier/supplier.module';
@@ -16,17 +20,17 @@ import { ProblemTypeModule } from './modules/problem-type/problem-type.module';
 import { ProblemType } from './modules/problem-type/problem-type.entity';
 import { CustomerModule } from './modules/customer/customer.module';
 import { Customer } from './modules/customer/customer.entity';
-import { Job } from './modules/job/job.entity';
-import { JobModule } from './modules/job/job.module';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { Brand } from './modules/brand/brand.entity';
-import { Issue } from './modules/issue/issue.entity';
 import { BrandModule } from './modules/brand/brand.module';
 import { IssueModule } from './modules/issue/issue.module';
 import { JobStatus } from './modules/job-status/job-status.entity';
 import { JobStatusModule } from './modules/job-status/job-status.module';
 import { PurchaseModule } from './modules/purchase/purchase.module';
+import { ProblemModule } from './modules/problem/problem.module';
 import { Purchase } from './modules/purchase/purchase.entity';
+import { ModelModule } from './modules/model/model.module';
+import { Problem } from './modules/problem/problem.entity';
+import { Model } from './modules/model/model.entity';
+import { Job } from './modules/job/job.entity';
 
 @Module({
   imports: [
@@ -52,6 +56,8 @@ import { Purchase } from './modules/purchase/purchase.entity';
           JobStatus,
           Job,
           Brand,
+          Model,
+          Problem,
           Issue,
           Purchase
         ],
@@ -68,6 +74,8 @@ import { Purchase } from './modules/purchase/purchase.entity';
     JobStatusModule,
     JobModule,
     BrandModule,
+    ModelModule,
+    ProblemModule,
     IssueModule,
     PurchaseModule,
   ],

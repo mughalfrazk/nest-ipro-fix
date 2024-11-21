@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './users.entity';
 import { FindOptionsWhere, IsNull, Repository } from 'typeorm';
 import { SignUpDto } from '@/auth/dtos/sign-up.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -51,20 +52,32 @@ export class UsersService {
   }
 
   async create(user: SignUpDto, company_id: string) {
-    const { first_name, last_name, email, password, target, phone, role_id, speciality_id } = user
+    const { first_name, last_name, email, password, target, progress, phone, address, role_id, speciality_id } = user
     console.log(user)
-    // return
-    const entity = this.repo.create({ 
+    const entity = this.repo.create({
       first_name,
       last_name,
-      target: +target,
+      target: +(target ?? 0),
+      progress,
       phone,
       email,
-      password, 
+      password,
+      address,
       role: { id: role_id },
       company: { id: company_id },
       speciality: { id: speciality_id }
     })
     return this.repo.save(entity)
+  }
+
+  async update(id: string, body: UpdateUserDto) {
+    const { first_name, last_name, target, phone, progress, address } = body
+
+    const payload: Partial<Users> = {
+      first_name, last_name, target: +target, phone, progress: +progress, address
+    }
+    
+    const entity = this.repo.findOne({ where: { id } })
+    return this.repo.save({ ...entity, ...payload })
   }
 }

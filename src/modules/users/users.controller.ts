@@ -1,4 +1,5 @@
-import { BadRequestException, Controller, Get, Param, Query } from "@nestjs/common";
+import { BadRequestException, Controller, Get, Param, Patch, Query } from "@nestjs/common";
+import { UpdateUserDto } from "./dtos/update-user.dto";
 import { ApiParam, ApiTags } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
 import { AuthUser } from "@/decorators/auth-user.decorator";
@@ -41,5 +42,14 @@ export class UsersController {
     if (!user) throw new BadRequestException("User not found.")
 
     return user
+  }
+
+  @Patch(":id")
+  @ApiParam({ name: "id", required: true })
+  @Roles(["admin", "receptionist", "staff"])
+  async updateUserProfile(@Param("id") id: string, body: UpdateUserDto) {
+    const user = await this.usersService.findById(id)
+    if (!user) throw new BadRequestException("User not found.")
+    return this.usersService.update(id, body)
   }
 }
