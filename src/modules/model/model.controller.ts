@@ -16,8 +16,8 @@ export class ModelController {
 
   @Post()
   async create(@Body() body: CreateModel) {
-    const brandEntity = this.modelService.findByName(body.name);
-    if (brandEntity) throw new BadRequestException("Model already exists.")
+    const modelEntity = await this.modelService.findByName(body.name);
+    if (modelEntity) throw new BadRequestException("Model already exists.")
 
     return this.modelService.create(body)
   }
@@ -26,6 +26,9 @@ export class ModelController {
   async update(@Param("id") id: number, @Body() body: UpdateModel) {
     const modelEntity = await this.modelService.findById(id);
     if (!modelEntity) throw new BadRequestException("Model not found.")
+
+    const repeatedEntity = await this.modelService.findByName(body.name);
+    if (repeatedEntity) throw new BadRequestException("Model already exists.")
 
     return this.modelService.update(id, body)
   }

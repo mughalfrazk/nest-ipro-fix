@@ -16,8 +16,8 @@ export class ProblemController {
 
   @Post()
   async create(@Body() body: CreateProblem) {
-    const brandEntity = this.problemService.findByName(body.name);
-    if (brandEntity) throw new BadRequestException("Problem already exists.")
+    const problemEntity = await this.problemService.findByName(body.name);
+    if (problemEntity) throw new BadRequestException("Problem already exists.")
 
     return this.problemService.create(body)
   }
