@@ -11,7 +11,7 @@ export class ModelService {
   constructor(@InjectRepository(Model) private repo: Repository<Model>) { }
 
   async findAll() {
-    return this.repo.find({ where: { deleted_at: IsNull() } })
+    return this.repo.find({ where: { deleted_at: IsNull() }, order: { created_at: "DESC" } })
   }
 
   async findById(id: number) {
