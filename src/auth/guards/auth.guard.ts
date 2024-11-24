@@ -1,7 +1,7 @@
 import { Request } from "express"
 import { JwtService } from "@nestjs/jwt";
 import { Reflector } from "@nestjs/core";
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { IS_PUBLIC_KEY } from "src/decorators/allow-anon.decorator";
 import { jwtConstants } from "../constants";
 import { UsersService } from "src/modules/users/users.service";
@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest()
     const token = this.extractTokenFromHeader(request)
     if (!token) {
-      throw new ForbiddenException();
+      throw new UnauthorizedException("401: Unauthorized Exception");
     }
 
     try {
@@ -35,7 +35,7 @@ export class AuthGuard implements CanActivate {
       const userProfile = await this.usersService.findById(sub)
       request.user = userProfile;
     } catch (error) {
-      throw new ForbiddenException();
+      throw new UnauthorizedException("401: Unauthorized Exception");
     }
 
     return true

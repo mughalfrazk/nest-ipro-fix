@@ -19,7 +19,7 @@ export class JobController {
   ) { }
 
   @Get()
-  @Roles(["super_admin", "technician"])
+  @Roles(["super_admin", "admin" , "technician"])
   async getAll(@AuthUser() { company }: Users) {
     return this.jobService.getAllCompanyJobs(company.id)
   }
@@ -44,6 +44,7 @@ export class JobController {
       const customerEntity = await this.customerService.findByNameOrPhone(body.customer.name, body.customer.phone)
       if (customerEntity) throw new BadRequestException("Customer already exist.")
     }
+    console.log(body)
     
     return await this.jobService.create(body, job_status.id, company.id)
   }

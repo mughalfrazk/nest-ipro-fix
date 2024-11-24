@@ -1,26 +1,44 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Brand } from "../brand/brand.entity";
 import { Job } from "../job/job.entity";
+import { Model } from "../model/model.entity";
+import { Part } from "../part/part.entity";
+import { Supplier } from "../supplier/supplier.entity";
 
 @Entity()
 export class Purchase {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => Brand, brand => brand.purchases, { nullable: false })
-  brand: Brand;
-  
-  @Column()
-  brand_id: number;
-
-  @ManyToOne(() => Job, job => job.purchases, { nullable: false })
+  @ManyToOne(() => Job, job => job.issues, { nullable: false })
   job: Job
 
   @Column({ type: "uuid" })
   job_id: string;
+
+  @ManyToOne(() => Brand, brand => brand.issues, { nullable: false })
+  brand: Brand
   
   @Column()
-  model: string;
+  brand_id: number;
+  
+  @ManyToOne(() => Model, model => model.issues, { nullable: false })
+  model: Model
+
+  @Column()
+  model_id: number;
+
+  @ManyToOne(() => Part, part => part.purchases, { nullable: false })
+  part: Part
+
+  @Column()
+  part_id: number;
+
+  @ManyToOne(() => Supplier, supplier => supplier.purchases, { nullable: false })
+  supplier: Supplier
+
+  @Column({ type: "uuid" })
+  supplier_id: number;
 
   @Column()
   quantity: number;
@@ -30,9 +48,6 @@ export class Purchase {
 
   @Column()
   total: number;
-
-  @Column()
-  parts: string;
 
   @CreateDateColumn({
     type: 'timestamp',

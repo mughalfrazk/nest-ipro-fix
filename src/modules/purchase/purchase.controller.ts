@@ -24,11 +24,7 @@ export class PurchaseController {
     let payload: CreatePurchasesDto = { purchases: [], job_id: body.job_id }
 
     for (let i = 0; i < body.purchases.length; i++) {
-      const element = body.purchases[i];
-      const purchases = await this.purchaseService.findByParts(element.parts)
-      if (!purchases) {
-        payload.purchases.push(element)
-      }
+      payload.purchases.push(body.purchases[i])
     }
 
     return this.purchaseService.createMultiple(payload)

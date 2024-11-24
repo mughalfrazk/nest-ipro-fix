@@ -1,17 +1,18 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Issue } from "../issue/issue.entity";
+import { Purchase } from "../purchase/purchase.entity";
 import { Company } from "../company/company.entity";
 
 @Entity()
-export class Problem {
+export class Part {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Company, company => company.problems)
+  @ManyToOne(() => Company, company => company.parts)
   company: Company
 
-  @OneToMany(() => Issue, issue => issue.problem)
-  issues: Issue[]
+  @OneToMany(() => Purchase, purchase => purchase.part)
+  purchases: Purchase[]
 
   @Column()
   name: string;

@@ -3,6 +3,10 @@ import { Users } from "../users/users.entity";
 import { Supplier } from "../supplier/supplier.entity";
 import { Job } from "../job/job.entity";
 import { Customer } from "../customer/customer.entity";
+import { Brand } from "../brand/brand.entity";
+import { Model } from "../model/model.entity";
+import { Part } from "../part/part.entity";
+import { Problem } from "../problem/problem.entity";
 
 @Entity()
 export class Company {
@@ -20,6 +24,18 @@ export class Company {
 
   @OneToMany(() => Customer, customer => customer.company)
   customers: Customer[]
+  
+  @OneToMany(() => Brand, brand => brand.company)
+  brands: Brand[]
+  
+  @OneToMany(() => Model, model => model.company)
+  models: Model[]
+  
+  @OneToMany(() => Part, part => part.company)
+  parts: Part[]
+  
+  @OneToMany(() => Problem, problem => problem.company)
+  problems: Problem[]
 
   @Column()
   name: string;
