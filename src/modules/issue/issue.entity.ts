@@ -18,21 +18,21 @@ export class Issue {
 
   @ManyToOne(() => Brand, brand => brand.issues, { nullable: false })
   brand: Brand
-
-  @ManyToOne(() => Model, model => model.issues, { nullable: false })
-  model: Model
-
+  
+  @Column()
+  brand_id: number;
+  
   @ManyToOne(() => Problem, problem => problem.issues, { nullable: false })
   problem: Problem
 
   @Column()
-  brand_id: number;
+  problem_id: number;
+  
+  @ManyToOne(() => Model, model => model.issues, { nullable: false })
+  model: Model
 
   @Column()
   model_id: number;
-
-  @Column()
-  problem_id: number;
 
   @Column()
   quantity: number;

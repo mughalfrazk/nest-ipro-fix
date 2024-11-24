@@ -3,6 +3,8 @@ import { ApiTags } from "@nestjs/swagger";
 import { ModelService } from "./model.service";
 import { CreateModel } from "./dto/create-model.dto";
 import { UpdateModel } from "./dto/update-model.dto";
+import { AuthUser } from "@/decorators/auth-user.decorator";
+import { Users } from "../users/users.entity";
 
 @ApiTags("Model")
 @Controller("model")
@@ -10,24 +12,24 @@ export class ModelController {
   constructor(private modelService: ModelService) { }
 
   @Get()
-  async getAll() {
-    return this.modelService.findAll()
+  async getAll(@AuthUser() { company }: Users) {
+    return this.modelService.findAll(company.id)
   }
 
   @Post()
-  async create(@Body() body: CreateModel) {
-    const modelEntity = await this.modelService.findByName(body.name);
+  async create(@Body() body: CreateModel, @AuthUser() { company }: Users) {
+    const modelEntity = await this.modelService.findByName(body.name, company.id);
     if (modelEntity) throw new BadRequestException("Model already exists.")
 
-    return this.modelService.create(body)
+    return this.modelService.create(body, company.id)
   }
 
   @Patch(':id')
-  async update(@Param("id") id: number, @Body() body: UpdateModel) {
+  async update(@Param("id") id: number, @Body() body: UpdateModel, @AuthUser() { company }: Users) {
     const modelEntity = await this.modelService.findById(id);
     if (!modelEntity) throw new BadRequestException("Model not found.")
 
-    const repeatedEntity = await this.modelService.findByName(body.name);
+    const repeatedEntity = await this.modelService.findByName(body.name, company.id);
     if (repeatedEntity) throw new BadRequestException("Model already exists.")
 
     return this.modelService.update(id, body)

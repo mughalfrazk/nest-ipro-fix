@@ -31,6 +31,8 @@ import { ModelModule } from './modules/model/model.module';
 import { Problem } from './modules/problem/problem.entity';
 import { Model } from './modules/model/model.entity';
 import { Job } from './modules/job/job.entity';
+import { Part } from './modules/part/part.entity';
+import { PartModule } from './modules/part/part.module';
 
 @Module({
   imports: [
@@ -58,6 +60,7 @@ import { Job } from './modules/job/job.entity';
           Brand,
           Model,
           Problem,
+          Part,
           Issue,
           Purchase
         ],
@@ -76,6 +79,7 @@ import { Job } from './modules/job/job.entity';
     BrandModule,
     ModelModule,
     ProblemModule,
+    PartModule,
     IssueModule,
     PurchaseModule,
   ],

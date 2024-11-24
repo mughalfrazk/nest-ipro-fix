@@ -40,7 +40,6 @@ export class UsersController {
     const user = await this.usersService.findById(id)
 
     if (!user) throw new BadRequestException("User not found.")
-
     return user
   }
 

@@ -3,6 +3,8 @@ import { ApiTags } from "@nestjs/swagger";
 import { ProblemService } from "./problem.service";
 import { CreateProblem } from "./dto/create-problem.dto";
 import { UpdateProblem } from "./dto/update-problem.dto";
+import { AuthUser } from "@/decorators/auth-user.decorator";
+import { Users } from "../users/users.entity";
 
 @ApiTags("Problem")
 @Controller("problem")
@@ -10,22 +12,25 @@ export class ProblemController {
   constructor(private problemService: ProblemService) { }
 
   @Get()
-  async getAll() {
-    return this.problemService.findAll()
+  async getAll(@AuthUser() { company }: Users) {
+    return this.problemService.findAll(company.id)
   }
 
   @Post()
-  async create(@Body() body: CreateProblem) {
-    const problemEntity = await this.problemService.findByName(body.name);
+  async create(@Body() body: CreateProblem, @AuthUser() { company }: Users) {
+    const problemEntity = await this.problemService.findByName(body.name, company.id);
     if (problemEntity) throw new BadRequestException("Problem already exists.")
 
-    return this.problemService.create(body)
+    return this.problemService.create(body, company.id)
   }
 
   @Patch(':id')
-  async update(@Param("id") id: number, @Body() body: UpdateProblem) {
+  async update(@Param("id") id: number, @Body() body: UpdateProblem, @AuthUser() { company }: Users) {
     const problemEntity = await this.problemService.findById(id);
     if (!problemEntity) throw new BadRequestException("Issue name not found.")
+
+    const repeatedEntity = await this.problemService.findByName(body.name, company.id);
+    if (repeatedEntity) throw new BadRequestException("Issue name already exists.")
 
     return this.problemService.update(id, body)
   }

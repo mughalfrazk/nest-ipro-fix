@@ -23,14 +23,14 @@ export class SupplierController {
 
   @Post()
   @Roles(['admin'])
-  async create(@Body() body: CreateSupplierDto, @AuthUser() user: Users) {
+  async create(@Body() { name, description }: CreateSupplierDto, @AuthUser() user: Users) {
     const { company } = user
 
-    const isDuplicated = await this.supplierService.findInCompanyByName(body.name, company.id)
+    const isDuplicated = await this.supplierService.findInCompanyByName(name, company.id)
     if (isDuplicated) {
       throw new BadRequestException("Supplier already exists.")
     }
 
-    return this.supplierService.create({ ...body, company })
+    return this.supplierService.create({ name, description, company })
   }
 }

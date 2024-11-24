@@ -25,7 +25,7 @@ export class JobService {
       entity = this.repo.create({
         company: { id: company_id },
         technician: { id: technician_id },
-        customer: customer_id ? { id: customer_id } : customer,
+        customer: customer_id === "new" ? customer : { id: customer_id },
         problem_type: { id: problem_type_id },
         job_status: { id: job_status_id },
         issues,

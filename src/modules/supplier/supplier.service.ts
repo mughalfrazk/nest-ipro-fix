@@ -7,12 +7,12 @@ import { InjectRepository } from "@nestjs/typeorm";
 export class SupplierService {
   constructor(@InjectRepository(Supplier) private repo: Repository<Supplier>) { }
 
-  async getAllByCompany(companyId: string) {
-    return this.repo.find({ where: { company: { id: companyId } } })
+  async getAllByCompany(company_id: string) {
+    return this.repo.find({ where: { company: { id: company_id } } })
   }
 
-  async findInCompanyByName(name: string, companyId: string) {
-    const entity = await this.repo.findOne({ where: { name, company: { id: companyId } } })
+  async findInCompanyByName(name: string, company_id: string) {
+    const entity = await this.repo.findOne({ where: { name, company: { id: company_id } } })
     console.log(entity)
     return !!entity
   }
@@ -25,7 +25,7 @@ export class SupplierService {
     return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
   }
 
-  async create(supplier: Omit<Supplier, keyof autoKeysEnum>) {
+  async create(supplier: Partial<Supplier>) {
     const entity = this.repo.create(supplier)
     return this.repo.save(entity)
   }

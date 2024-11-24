@@ -16,8 +16,14 @@ class CreatePurchaseDto {
   @IsNumber()
   brand_id: number;
 
+  @IsNumber()
+  model_id: number;
+  
+  @IsNumber()
+  part_id: number;
+
   @IsString()
-  model: string;
+  supplier_id: string;
 
   @IsNumber()
   quantity: number;
@@ -27,7 +33,4 @@ class CreatePurchaseDto {
 
   @IsNumber()
   total: number;
-
-  @IsString()
-  parts: string;
 }

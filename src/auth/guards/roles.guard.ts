@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs";
 
@@ -20,6 +20,6 @@ export class RolesGuard implements CanActivate {
       return true
     }
 
-    throw new ForbiddenException("Authorization failed!")
+    throw new ForbiddenException("403: Forbidden Exception")
   }
 }

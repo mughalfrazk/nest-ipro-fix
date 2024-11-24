@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, DeleteDateColumn, UpdateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, UpdateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Company } from "../company/company.entity";
+import { Purchase } from "../purchase/purchase.entity";
 
 @Entity()
 export class Supplier {
@@ -8,6 +9,9 @@ export class Supplier {
 
   @ManyToOne(() => Company, company => company.suppliers, { nullable: false })
   company: Company
+
+  @OneToMany(() => Purchase, purchase => purchase.supplier)
+  purchases: Purchase[]
 
   @Column()
   name: string;
