@@ -14,9 +14,6 @@ export class CreatePurchasesDto {
 
 class CreatePurchaseDto {
   @IsNumber()
-  brand_id: number;
-
-  @IsNumber()
   model_id: number;
   
   @IsNumber()
@@ -27,9 +24,6 @@ class CreatePurchaseDto {
 
   @IsNumber()
   quantity: number;
-
-  @IsNumber()
-  charges: number;
 
   @IsNumber()
   total: number;
