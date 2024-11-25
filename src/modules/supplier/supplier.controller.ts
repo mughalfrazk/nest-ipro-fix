@@ -27,9 +27,7 @@ export class SupplierController {
     const { company } = user
 
     const isDuplicated = await this.supplierService.findInCompanyByName(name, company.id)
-    if (isDuplicated) {
-      throw new BadRequestException("Supplier already exists.")
-    }
+    if (isDuplicated) throw new BadRequestException("Supplier already exists.")
 
     return this.supplierService.create({ name, description, company })
   }

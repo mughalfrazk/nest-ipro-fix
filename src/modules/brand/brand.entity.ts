@@ -14,8 +14,8 @@ export class Brand {
   @OneToMany(() => Issue, issue => issue.brand)
   issues: Issue[]
 
-  @OneToMany(() => Purchase, purchase => purchase.brand)
-  purchases: Purchase[]
+  // @OneToMany(() => Purchase, purchase => purchase.brand)
+  // purchases: Purchase[]
 
   @Column()
   name: string;

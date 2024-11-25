@@ -7,8 +7,7 @@ import { JobModule } from "../job/job.module";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Purchase]),
-    JobModule
+    TypeOrmModule.forFeature([Purchase])
   ],
   providers: [PurchaseService],
   controllers: [PurchaseController],

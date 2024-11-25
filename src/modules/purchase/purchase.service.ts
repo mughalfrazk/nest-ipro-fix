@@ -13,20 +13,18 @@ export class PurchaseService {
   }
 
   async findByJobs(job_id: string) {
-    return this.repo.find({ where: { job: { id: job_id } }, relations: ["brand"] })
+    return this.repo.find({ where: { job: { id: job_id } }})
   }
 
   async createMultiple(payload: CreatePurchasesDto) {
     const { purchases, job_id } = payload;
 
-    const entity = purchases.map(({ brand_id, model_id, supplier_id, part_id, quantity, charges, total }) => this.repo.create({
+    const entity = purchases.map(({ model_id, supplier_id, part_id, quantity, total }) => this.repo.create({
       job: { id: job_id },
       model: { id: model_id },
       supplier: { id: supplier_id },
-      brand: { id: brand_id },
       part: { id: part_id },
       quantity,
-      charges,
       total
     }))
 

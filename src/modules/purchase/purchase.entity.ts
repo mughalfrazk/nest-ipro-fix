@@ -16,11 +16,11 @@ export class Purchase {
   @Column({ type: "uuid" })
   job_id: string;
 
-  @ManyToOne(() => Brand, brand => brand.issues, { nullable: false })
-  brand: Brand
+  // @ManyToOne(() => Brand, brand => brand.issues, { nullable: true })
+  // brand: Brand
   
-  @Column()
-  brand_id: number;
+  // @Column()
+  // brand_id: number;
   
   @ManyToOne(() => Model, model => model.issues, { nullable: false })
   model: Model
@@ -43,7 +43,7 @@ export class Purchase {
   @Column()
   quantity: number;
 
-  @Column()
+  @Column({ nullable: true })
   charges: number;
 
   @Column()
