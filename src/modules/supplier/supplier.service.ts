@@ -13,7 +13,6 @@ export class SupplierService {
 
   async findInCompanyByName(name: string, company_id: string) {
     const entity = await this.repo.findOne({ where: { name, company: { id: company_id } } })
-    console.log(entity)
     return !!entity
   }
 
@@ -23,6 +22,10 @@ export class SupplierService {
 
   async findById(id: string) {
     return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
+  }
+
+  async findAllPurchasesBySupplier(company_id: string) {
+    return this.repo.find({ where: { company: { id: company_id } }, relations: ["purchases.part"] })
   }
 
   async create(supplier: Partial<Supplier>) {

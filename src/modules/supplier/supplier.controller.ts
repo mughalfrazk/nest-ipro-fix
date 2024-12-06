@@ -15,14 +15,20 @@ export class SupplierController {
   ) { }
 
   @Get()
-  @Roles(['admin'])
+  @Roles(['super_admin', 'admin'])
   async getAll(@AuthUser() user: Users) {
     const { company } = user
     return this.supplierService.getAllByCompany(company.id)
   }
 
+  @Get("/purchases")
+  @Roles(['super_admin', 'admin'])
+  async getAllPurchasesBySupplier(@AuthUser() { company }: Users) {
+    return this.supplierService.findAllPurchasesBySupplier(company.id)
+  }
+
   @Post()
-  @Roles(['admin'])
+  @Roles(['super_admin', 'admin'])
   async create(@Body() { name, description }: CreateSupplierDto, @AuthUser() user: Users) {
     const { company } = user
 

@@ -12,7 +12,7 @@ export class PurchaseService {
     return this.repo.findOne({ where: { id: purchase_id } })
   }
 
-  async findByJobs(job_id: string) {
+  async findBySingleJobs(job_id: string) {
     return this.repo.find({ where: { job: { id: job_id } }})
   }
 
