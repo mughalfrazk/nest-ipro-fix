@@ -33,6 +33,8 @@ import { Model } from './modules/model/model.entity';
 import { Job } from './modules/job/job.entity';
 import { Part } from './modules/part/part.entity';
 import { PartModule } from './modules/part/part.module';
+import { ExpenseType } from './modules/expense-type/expense-type.entity';
+import { ExpenseTypeModule } from './modules/expense-type/expense-type.module';
 
 @Module({
   imports: [
@@ -62,7 +64,8 @@ import { PartModule } from './modules/part/part.module';
           Problem,
           Part,
           Issue,
-          Purchase
+          Purchase,
+          ExpenseType
         ],
         namingStrategy: new SnakeNamingStrategy()
       })
@@ -82,6 +85,7 @@ import { PartModule } from './modules/part/part.module';
     PartModule,
     IssueModule,
     PurchaseModule,
+    ExpenseTypeModule
   ],
   providers: [AppService]
 })
