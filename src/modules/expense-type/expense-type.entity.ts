@@ -1,18 +1,13 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Issue } from "../issue/issue.entity";
-import { Purchase } from "../purchase/purchase.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Company } from "../company/company.entity";
 
 @Entity()
-export class Brand {
+export class ExpenseType {
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => Company, company => company.brands)
   company: Company
-
-  @OneToMany(() => Issue, issue => issue.brand)
-  issues: Issue[]
 
   @Column()
   name: string;
