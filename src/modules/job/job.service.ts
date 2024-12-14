@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { IsNull, Repository } from "typeorm";
 
 import { Job } from "./job.entity";
 import { CreateJobDto } from "./dto/create-job.dto";
@@ -10,11 +10,11 @@ export class JobService {
   constructor(@InjectRepository(Job) private repo: Repository<Job>) { }
 
   async findById(job_id: string, company_id: string) {
-    return this.repo.find({ where: { id: job_id, company: { id: company_id } }, relations: ["customer", "technician", "job_status", "issues", "purchases", "problem_type"] })
+    return this.repo.find({ where: { id: job_id, company: { id: company_id }, deleted_at: IsNull() }, relations: ["customer", "technician", "job_status", "issues", "purchases", "problem_type"] })
   }
 
   async getAllCompanyJobs(company_id: string) {
-    return this.repo.find({ select: ["id", "customer"], where: { company: { id: company_id } }, relations: ["customer", "technician", "job_status", "issues", "problem_type"] })
+    return this.repo.find({ select: ["id", "customer", "created_at", "updated_at"], where: { company: { id: company_id }, deleted_at: IsNull() }, relations: ["customer", "technician", "job_status", "issues", "problem_type"] })
   }
 
   async create(payload: CreateJobDto, job_status_id: number, company_id: string) {

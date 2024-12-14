@@ -29,8 +29,7 @@ export class ProblemController {
     const problemEntity = await this.problemService.findById(id);
     if (!problemEntity) throw new BadRequestException("Issue name not found.")
 
-    const repeatedEntity = await this.problemService.findByName(body.name, company.id);
-    if (repeatedEntity) throw new BadRequestException("Issue name already exists.")
+    if (body.name === "") throw new BadRequestException("Name is required.")
 
     return this.problemService.update(id, body)
   }
