@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Post } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 
 import { Users } from "../users/users.entity";
@@ -6,6 +6,7 @@ import { SupplierService } from "./supplier.service";
 import { AuthUser } from "src/decorators/auth-user.decorator";
 import { CreateSupplierDto } from "./dto/create-supplier.dto";
 import { Roles } from "src/auth/decorators/roles.decorator";
+import { UpdateSupplierDto } from "./dto/update-supplier.dto";
 
 @ApiTags("Supplier")
 @Controller("supplier")
@@ -36,5 +37,22 @@ export class SupplierController {
     if (isDuplicated) throw new BadRequestException("Supplier already exists.")
 
     return this.supplierService.create({ name, description, company })
+  }
+
+  @Patch(":id")
+  @Roles(["super_admin", "admin"])
+  async update(@Param("id") id: string, @Body() body: UpdateSupplierDto, @AuthUser() { company }: Users) {
+    const supplierEntity = await this.supplierService.findById(id);
+    if (!supplierEntity) throw new BadRequestException("Supplier not found.")
+
+    if (body.name === "") throw new BadRequestException("Name is required.")
+
+    return this.supplierService.update(id, body)
+  }
+
+  @Delete(":id")
+  @Roles(["super_admin", "admin"])
+  async delete(@Param("id") id: string) {
+    await this.supplierService.deleteRow(id)
   }
 }

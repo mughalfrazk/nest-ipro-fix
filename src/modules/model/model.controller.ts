@@ -29,8 +29,7 @@ export class ModelController {
     const modelEntity = await this.modelService.findById(id);
     if (!modelEntity) throw new BadRequestException("Model not found.")
 
-    const repeatedEntity = await this.modelService.findByName(body.name, company.id);
-    if (repeatedEntity) throw new BadRequestException("Model already exists.")
+    if (body.name === "") throw new BadRequestException("Name is required.")
 
     return this.modelService.update(id, body)
   }

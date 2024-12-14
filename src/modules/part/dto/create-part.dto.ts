@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from "class-validator";
 
-export class CreatePart {
+export class CreatePartDto {
   @IsString()
   name: string;
 

@@ -29,8 +29,7 @@ export class BrandController {
     const brandEntity = await this.brandService.findById(id);
     if (!brandEntity) throw new BadRequestException("Brand not found.")
 
-    const repeatedEntity = await this.brandService.findByName(body.name, company.id);
-    if (repeatedEntity) throw new BadRequestException("Brand already exists.")
+    if (body.name === "") throw new BadRequestException("Name is required.")
 
     return this.brandService.update(id, body)
   }

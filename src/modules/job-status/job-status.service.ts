@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { IsNull, Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
@@ -8,6 +8,10 @@ import { jobStatusSeeder } from "./job.status.seeder";
 @Injectable()
 export class JobStatusService {
   constructor(@InjectRepository(JobStatus) private repo: Repository<JobStatus>) { }
+
+  async findAll() {
+    return this.repo.find({ where: { deleted_at: IsNull() }, order: { created_at: "DESC" } })
+  }
 
   async findByName(name: string) {
     return this.repo.findOne({ where: { name } })
