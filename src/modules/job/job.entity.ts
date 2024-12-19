@@ -7,6 +7,7 @@ import { Issue } from "../issue/issue.entity";
 import { JobStatus } from "../job-status/job-status.entity";
 import { ProblemType } from "../problem-type/problem-type.entity";
 import { Purchase } from "../purchase/purchase.entity";
+import { Comment } from "../comment/comment.entity";
 
 @Entity()
 export class Job {
@@ -33,6 +34,9 @@ export class Job {
 
   @OneToMany(() => Purchase, purchase => purchase.job, { cascade: ["insert"] })
   purchases: Purchase[]
+
+  @OneToMany(() => Comment, comment => comment.job)
+  comments: Comment[]
 
   @CreateDateColumn({
     type: 'timestamp',

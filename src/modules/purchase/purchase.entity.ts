@@ -1,5 +1,4 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Brand } from "../brand/brand.entity";
 import { Job } from "../job/job.entity";
 import { Model } from "../model/model.entity";
 import { Part } from "../part/part.entity";
@@ -15,12 +14,6 @@ export class Purchase {
 
   @Column({ type: "uuid" })
   job_id: string;
-
-  // @ManyToOne(() => Brand, brand => brand.issues, { nullable: true })
-  // brand: Brand
-  
-  // @Column()
-  // brand_id: number;
   
   @ManyToOne(() => Model, model => model.issues, { nullable: false })
   model: Model
