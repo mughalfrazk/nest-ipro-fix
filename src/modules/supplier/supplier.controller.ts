@@ -53,6 +53,11 @@ export class SupplierController {
   @Delete(":id")
   @Roles(["super_admin", "admin"])
   async delete(@Param("id") id: string) {
+    const entity = await this.supplierService.findById(id)
+    if (!entity) throw new BadRequestException("Supplier not found")
+
+    if (!!entity.purchases.length) throw new BadRequestException("Supplier cannot be deleted, due to dependency with purchases.")
+
     await this.supplierService.deleteRow(id)
   }
 }

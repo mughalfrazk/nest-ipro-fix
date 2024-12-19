@@ -40,6 +40,11 @@ export class PartController {
   @Delete(':id')
   @Roles(["super_admin", "admin"])
   async delete(@Param("id") id: number) {
+    const entity = await this.partService.findById(id)
+    if (!entity) throw new BadRequestException("Part not found")
+
+    if (!!entity.purchases.length) throw new BadRequestException("Part cannot be deleted, due to dependency with purchases.")
+
     await this.partService.deleteRow(id)
   }
 }

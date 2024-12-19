@@ -22,7 +22,7 @@ export class SupplierService {
   }
 
   async findById(id: string) {
-    return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
+    return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ["purchases"] })
   }
 
   async findAllPurchasesBySupplier(company_id: string) {

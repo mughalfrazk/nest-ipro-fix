@@ -35,7 +35,12 @@ export class ProblemController {
   }
 
   @Delete(':id')
-  async delete(@Param("id") id: string) {
+  async delete(@Param("id") id: number) {
+    const entity = await this.problemService.findById(id)
+    if (!entity) throw new BadRequestException("Issue not found")
+
+    if (!!entity.issues.length) throw new BadRequestException("Issue cannot be deleted, due to dependency with jobs issue.")
+
     await this.problemService.deleteRow(id)
   }
 }

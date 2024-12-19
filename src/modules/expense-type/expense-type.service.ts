@@ -15,7 +15,7 @@ export class ExpenseTypeService {
   }
 
   async findById(id: number) {
-    return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
+    return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ["expenses"] })
   }
 
   async findByName(name: string, company_id) {
@@ -34,7 +34,7 @@ export class ExpenseTypeService {
     return this.findById(id)
   }
 
-  async deleteRow(id: string) {
+  async deleteRow(id: number) {
     return this.repo.update(id, { deleted_at: new Date() })
   }
 }

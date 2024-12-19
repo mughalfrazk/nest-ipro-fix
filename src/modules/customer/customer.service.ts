@@ -14,7 +14,7 @@ export class CustomerService {
   }
 
   async findById(id: string) {
-    return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
+    return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ['jobs'] })
   }
 
   async findByNameOrPhone(name: string, phone: string) {
