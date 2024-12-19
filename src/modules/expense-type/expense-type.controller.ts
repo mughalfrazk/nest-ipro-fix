@@ -9,33 +9,33 @@ import { Users } from "../users/users.entity";
 @ApiTags("Expense Type")
 @Controller("expense-type")
 export class ExpenseTypeController {
-  constructor(private brandService: ExpenseTypeService) { }
+  constructor(private expenseTypeService: ExpenseTypeService) { }
 
   @Get()
   async getAll(@AuthUser() { company }: Users) {
-    return this.brandService.findAll(company.id)
+    return this.expenseTypeService.findAll(company.id)
   }
 
   @Post()
   async create(@Body() body: CreateExpenseType, @AuthUser() { company }: Users) {
-    const brandEntity = await this.brandService.findByName(body.name, company.id);
-    if (brandEntity) throw new BadRequestException("Brand already exists.")
+    const brandEntity = await this.expenseTypeService.findByName(body.name, company.id);
+    if (brandEntity) throw new BadRequestException("Expense type already exists.")
 
-    return this.brandService.create(body, company.id)
+    return this.expenseTypeService.create(body, company.id)
   }
 
   @Patch(':id')
   async update(@Param("id") id: number, @Body() body: UpdateExpenseType) {
-    const brandEntity = await this.brandService.findById(id);
-    if (!brandEntity) throw new BadRequestException("Brand not found.")
+    const brandEntity = await this.expenseTypeService.findById(id);
+    if (!brandEntity) throw new BadRequestException("Expense type not found.")
 
     if (body.name === "") throw new BadRequestException("Name is required.")
 
-    return this.brandService.update(id, body)
+    return this.expenseTypeService.update(id, body)
   }
 
   @Delete(':id')
   async delete(@Param("id") id: string) {
-    await this.brandService.deleteRow(id)
+    await this.expenseTypeService.deleteRow(id)
   }
 }

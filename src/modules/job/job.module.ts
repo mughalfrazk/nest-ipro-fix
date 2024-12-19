@@ -6,12 +6,14 @@ import { JobController } from "./job.controller";
 import { JobService } from "./job.service";
 import { Job } from "./job.entity";
 import { CustomerModule } from "../customer/customer.module";
+import { IssueModule } from "../issue/issue.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Job]),
     JobStatusModule,
-    CustomerModule
+    CustomerModule,
+    IssueModule
   ],
   controllers: [JobController],
   providers: [JobService],

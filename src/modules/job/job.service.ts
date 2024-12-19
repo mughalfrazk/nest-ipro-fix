@@ -4,13 +4,14 @@ import { IsNull, Repository } from "typeorm";
 
 import { Job } from "./job.entity";
 import { CreateJobDto } from "./dto/create-job.dto";
+import { UpdateJobDto } from "./dto/update-job.dto";
 
 @Injectable()
 export class JobService {
   constructor(@InjectRepository(Job) private repo: Repository<Job>) { }
 
   async findById(job_id: string, company_id: string) {
-    return this.repo.find({ where: { id: job_id, company: { id: company_id }, deleted_at: IsNull() }, relations: ["customer", "technician", "job_status", "issues", "purchases", "problem_type"] })
+    return this.repo.findOne({ where: { id: job_id, company: { id: company_id }, deleted_at: IsNull() }, relations: ["customer", "technician", "job_status", "issues", "purchases", "problem_type"] })
   }
 
   async getAllCompanyJobs(company_id: string) {
@@ -40,7 +41,26 @@ export class JobService {
       })
     }
 
-
     return this.repo.save(entity)
+  }
+
+  async update(id: string, payload: UpdateJobDto) {
+    const { technician_id, problem_type_id, job_status_id, issues } = payload
+    let entity;
+
+    if (technician_id) {
+      entity = this.repo.create({
+        technician: { id: technician_id },
+        problem_type: { id: problem_type_id },
+        job_status: { id: job_status_id }
+      })
+    } else {
+      entity = this.repo.create({
+        problem_type: { id: problem_type_id },
+        job_status: { id: job_status_id }
+      })
+    }
+
+    return this.repo.update(id, entity)
   }
 }
