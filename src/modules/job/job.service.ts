@@ -11,7 +11,22 @@ export class JobService {
   constructor(@InjectRepository(Job) private repo: Repository<Job>) { }
 
   async findById(job_id: string, company_id: string) {
-    return this.repo.findOne({ where: { id: job_id, company: { id: company_id }, deleted_at: IsNull() }, relations: ["customer", "technician", "job_status", "issues", "purchases", "problem_type"] })
+    return this.repo.findOne({
+      where: {
+        id: job_id,
+        company: { id: company_id },
+        deleted_at: IsNull()
+      },
+      relations: [
+        "customer",
+        "technician",
+        "job_status",
+        "issues",
+        "purchases",
+        "problem_type",
+        "comments.created_by"
+      ]
+    })
   }
 
   async getAllCompanyJobs(company_id: string) {
