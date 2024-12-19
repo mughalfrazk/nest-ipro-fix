@@ -15,7 +15,7 @@ export class ModelService {
   }
 
   async findById(id: number) {
-    return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
+    return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ["issues", "purchases"] })
   }
 
   async findByName(name: string, company_id: string) {
@@ -34,7 +34,7 @@ export class ModelService {
     return this.findById(id)
   }
 
-  async deleteRow(id: string) {
+  async deleteRow(id: number) {
     return this.repo.update(id, { deleted_at: new Date() })
   }
 }

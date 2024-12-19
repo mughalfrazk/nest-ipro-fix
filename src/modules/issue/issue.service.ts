@@ -1,13 +1,17 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Issue } from "./issue.entity";
-import { Repository } from "typeorm";
+import { IsNull, Repository } from "typeorm";
 import { CreateIssueDto } from "./dto/create-issue.dto";
 import { UpdateIssueDto } from "./dto/update-issue.dto";
 
 @Injectable()
 export class IssueService {
   constructor(@InjectRepository(Issue) private repo: Repository<Issue>) { }
+
+  async findById(id: string) {
+    return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
+  }
 
   async create(payload: CreateIssueDto, job_id: string) {
     const { model_id, quantity, charges, total, brand_id, problem_id } = payload;

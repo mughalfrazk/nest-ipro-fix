@@ -36,6 +36,9 @@ export class ExpenseController {
 
   @Delete(':id')
   async delete(@Param("id") id: string) {
+    const entity = await this.expenseService.findById(id)
+    if (!entity) throw new BadRequestException("Expense not found")
+
     await this.expenseService.deleteRow(id)
   }
 }

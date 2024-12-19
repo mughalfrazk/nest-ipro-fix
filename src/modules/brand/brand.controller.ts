@@ -35,7 +35,12 @@ export class BrandController {
   }
 
   @Delete(':id')
-  async delete(@Param("id") id: string) {
+  async delete(@Param("id") id: number) {
+    const entity = await this.brandService.findById(id)
+    if (!entity) throw new BadRequestException("Brand not found")
+
+    if (!!entity.issues.length) throw new BadRequestException("Brand cannot be deleted, due to dependency with issues")
+
     await this.brandService.deleteRow(id)
   }
 }

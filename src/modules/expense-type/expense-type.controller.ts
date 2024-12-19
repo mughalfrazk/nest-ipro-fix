@@ -35,7 +35,12 @@ export class ExpenseTypeController {
   }
 
   @Delete(':id')
-  async delete(@Param("id") id: string) {
+  async delete(@Param("id") id: number) {
+    const entity = await this.expenseTypeService.findById(id)
+    if (!entity) throw new BadRequestException("Expense type not found")
+
+    if (!!entity.expenses.length) throw new BadRequestException("Expense type cannot be deleted, due to dependency with expense.")
+
     await this.expenseTypeService.deleteRow(id)
   }
 }

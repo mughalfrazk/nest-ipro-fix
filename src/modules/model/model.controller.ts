@@ -35,7 +35,13 @@ export class ModelController {
   }
 
   @Delete(':id')
-  async delete(@Param("id") id: string) {
+  async delete(@Param("id") id: number) {
+    const entity = await this.modelService.findById(id)
+    if (!entity) throw new BadRequestException("Model not found")
+
+    if (!!entity.purchases.length) throw new BadRequestException("Model cannot be deleted, due to dependency with purchases.")
+    if (!!entity.issues.length) throw new BadRequestException("Model cannot be deleted, due to dependency with issues.")
+
     await this.modelService.deleteRow(id)
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Delete, Param } from "@nestjs/common";
+import { BadRequestException, Controller, Delete, Param } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { IssueService } from "./issue.service";
 
@@ -9,6 +9,9 @@ export class IssueController {
 
   @Delete(":id")
   async delete(@Param("id") id: string) {
+    const entity = await this.issueService.findById(id)
+    if (!entity) throw new BadRequestException("Issue not found")
+
     return this.issueService.deleteRow(id)
   }
 }

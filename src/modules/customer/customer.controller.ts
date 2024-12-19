@@ -38,6 +38,11 @@ export class CustomerContoller {
   @Delete(":id")
   @Roles(["super_admin", "admin"])
   async delete(@Param("id") id: string) {
+    const entity = await this.customerService.findById(id)
+    if (!entity) throw new BadRequestException("Customer not found")
+
+    if (!!entity.jobs.length) throw new BadRequestException("Customer cannot be deleted, due to dependency with job.")
+
     await this.customerService.deleteRow(id)
   }
 }

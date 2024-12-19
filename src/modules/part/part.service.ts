@@ -15,7 +15,7 @@ export class PartService {
   }
 
   async findById(id: number) {
-    return this.repo.findOne({ where: { id, deleted_at: IsNull() } })
+    return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ["purchases"] })
   }
 
   async findByName(name: string, company_id: string) {
