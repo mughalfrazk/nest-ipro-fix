@@ -1,14 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { AuthUser } from "@/decorators/auth-user.decorator";
 import { CreateExpense } from "./dto/create-expense.dto";
 import { Users } from "@/modules/users/users.entity";
 import { ExpenseService } from "./expense.service";
+import { ExpenseTypeService } from "../expense-type/expense-type.service";
 
 @ApiTags("Expense")
 @Controller("expense")
 export class ExpenseController {
-  constructor(private expenseService: ExpenseService) { }
+  constructor(private expenseService: ExpenseService, private expenseTypeService: ExpenseTypeService) { }
 
   @Get()
   async getAll(@AuthUser() { company }: Users) {
@@ -17,6 +18,9 @@ export class ExpenseController {
 
   @Post()
   async create(@Body() body: CreateExpense, @AuthUser() user: Users) {
+    const expenstTypeEntity = await this.expenseTypeService.findById(body.expense_type_id)
+    if (!expenstTypeEntity) throw new BadRequestException("Valid expense type is required.")
+
     return this.expenseService.create(body, user)
   }
 
