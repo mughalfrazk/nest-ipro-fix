@@ -29,10 +29,11 @@ export class PartController {
   @Patch(':id')
   @Roles(["super_admin", "admin"])
   async update(@Param("id") id: number, @Body() body: UpdatePartDto, @AuthUser() { company }: Users) {
-    const partEntity = await this.partService.findById(id);
-    if (!partEntity) throw new BadRequestException("Part not found.")
+    const entity = await this.partService.findById(id);
+    if (!entity) throw new BadRequestException("Part not found.")
 
     if (body.name === "") throw new BadRequestException("Name is required.")
+    if (body.name.toLowerCase() === entity.name.toLowerCase()) throw new BadRequestException("Part already exists.")
 
     return this.partService.update(id, body)
   }

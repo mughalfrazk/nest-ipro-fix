@@ -26,10 +26,11 @@ export class ModelController {
 
   @Patch(':id')
   async update(@Param("id") id: number, @Body() body: UpdateModel, @AuthUser() { company }: Users) {
-    const modelEntity = await this.modelService.findById(id);
-    if (!modelEntity) throw new BadRequestException("Model not found.")
+    const entity = await this.modelService.findById(id);
+    if (!entity) throw new BadRequestException("Model not found.")
 
     if (body.name === "") throw new BadRequestException("Name is required.")
+    if (body.name.toLowerCase() === entity.name.toLowerCase()) throw new BadRequestException("Model already exists.")
 
     return this.modelService.update(id, body)
   }

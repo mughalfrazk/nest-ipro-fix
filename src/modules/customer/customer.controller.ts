@@ -27,10 +27,11 @@ export class CustomerContoller {
   @Patch(":id")
   @Roles(["super_admin", "admin"])
   async update(@Param("id") id: string, @Body() body: UpdateCustomerDto, @AuthUser() { company }: Users) {
-    const customerEntity = await this.customerService.findById(id);
-    if (!customerEntity) throw new BadRequestException("Customer not found.")
+    const entity = await this.customerService.findById(id);
+    if (!entity) throw new BadRequestException("Customer not found.")
 
     if (body.name === "") throw new BadRequestException("Name is required.")
+      if (body.name.toLowerCase() === entity.name.toLowerCase()) throw new BadRequestException("Customer already exists.")
 
     return this.customerService.update(id, body)
   }
