@@ -26,10 +26,11 @@ export class ProblemController {
 
   @Patch(':id')
   async update(@Param("id") id: number, @Body() body: UpdateProblem, @AuthUser() { company }: Users) {
-    const problemEntity = await this.problemService.findById(id);
-    if (!problemEntity) throw new BadRequestException("Issue name not found.")
+    const entity = await this.problemService.findById(id);
+    if (!entity) throw new BadRequestException("Issue name not found.")
 
     if (body.name === "") throw new BadRequestException("Name is required.")
+    if (body.name.toLowerCase() === entity.name.toLowerCase()) throw new BadRequestException("Problem already exists.")
 
     return this.problemService.update(id, body)
   }

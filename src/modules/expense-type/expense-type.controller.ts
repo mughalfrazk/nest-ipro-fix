@@ -26,10 +26,12 @@ export class ExpenseTypeController {
 
   @Patch(':id')
   async update(@Param("id") id: number, @Body() body: UpdateExpenseType) {
-    const brandEntity = await this.expenseTypeService.findById(id);
-    if (!brandEntity) throw new BadRequestException("Expense type not found.")
+    const entity = await this.expenseTypeService.findById(id);
+    if (!entity) throw new BadRequestException("Expense type not found.")
 
     if (body.name === "") throw new BadRequestException("Name is required.")
+    if (body.name.toLowerCase() === entity.name.toLowerCase()) throw new BadRequestException("Expense type already exists.")
+
 
     return this.expenseTypeService.update(id, body)
   }

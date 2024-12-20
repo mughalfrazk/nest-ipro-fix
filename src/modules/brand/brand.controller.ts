@@ -26,10 +26,11 @@ export class BrandController {
 
   @Patch(':id')
   async update(@Param("id") id: number, @Body() body: UpdateBrand, @AuthUser() { company }: Users) {
-    const brandEntity = await this.brandService.findById(id);
-    if (!brandEntity) throw new BadRequestException("Brand not found.")
+    const entity = await this.brandService.findById(id);
+    if (!entity) throw new BadRequestException("Brand not found.")
 
     if (body.name === "") throw new BadRequestException("Name is required.")
+    if (body.name.toLowerCase() === entity.name.toLowerCase()) throw new BadRequestException("Brand already exists.")
 
     return this.brandService.update(id, body)
   }

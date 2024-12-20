@@ -42,10 +42,11 @@ export class SupplierController {
   @Patch(":id")
   @Roles(["super_admin", "admin"])
   async update(@Param("id") id: string, @Body() body: UpdateSupplierDto, @AuthUser() { company }: Users) {
-    const supplierEntity = await this.supplierService.findById(id);
-    if (!supplierEntity) throw new BadRequestException("Supplier not found.")
+    const entity = await this.supplierService.findById(id);
+    if (!entity) throw new BadRequestException("Supplier not found.")
 
     if (body.name === "") throw new BadRequestException("Name is required.")
+    if (body.name.toLowerCase() === entity.name.toLowerCase()) throw new BadRequestException("Supplier already exists.")
 
     return this.supplierService.update(id, body)
   }
