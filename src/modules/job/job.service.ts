@@ -24,8 +24,13 @@ export class JobService {
         "issues",
         "purchases",
         "problem_type",
-        "comments.created_by"
-      ]
+        "comments.created_by.role"
+      ],
+      order: {
+        comments: {
+          created_at: "ASC"
+        }
+      }
     })
   }
 
