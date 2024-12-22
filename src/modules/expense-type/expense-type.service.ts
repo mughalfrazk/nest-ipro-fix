@@ -18,7 +18,7 @@ export class ExpenseTypeService {
     return this.repo.findOne({ where: { id, deleted_at: IsNull() }, relations: ["expenses"] })
   }
 
-  async findByName(name: string, company_id) {
+  async findByName(name: string, company_id: string) {
     return this.repo.findOne({ where: { name, company: { id: company_id }, deleted_at: IsNull() } })
   }
 

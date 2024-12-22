@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMan
 import { Issue } from "../issue/issue.entity";
 import { Purchase } from "../purchase/purchase.entity";
 import { Company } from "../company/company.entity";
+import { InvoiceItem } from "../invoice-item/invoice-item.entity";
 
 @Entity()
 export class Brand {
@@ -13,6 +14,9 @@ export class Brand {
 
   @OneToMany(() => Issue, issue => issue.brand)
   issues: Issue[]
+
+  @OneToMany(() => InvoiceItem, invoice_item => invoice_item.brand)
+  invoice_items: InvoiceItem[]
 
   @Column()
   name: string;

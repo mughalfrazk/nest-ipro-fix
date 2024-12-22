@@ -1,4 +1,4 @@
-import { CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 import { Customer } from "../customer/customer.entity";
 import { Users } from "../users/users.entity";
@@ -8,6 +8,7 @@ import { JobStatus } from "../job-status/job-status.entity";
 import { ProblemType } from "../problem-type/problem-type.entity";
 import { Purchase } from "../purchase/purchase.entity";
 import { Comment } from "../comment/comment.entity";
+import { Invoice } from "../invoice/invoice.entity";
 
 @Entity()
 export class Job {
@@ -37,6 +38,9 @@ export class Job {
 
   @OneToMany(() => Comment, comment => comment.job)
   comments: Comment[]
+
+  @OneToOne(() => Invoice, invoice => invoice.job)
+  invoice: Invoice
 
   @CreateDateColumn({
     type: 'timestamp',

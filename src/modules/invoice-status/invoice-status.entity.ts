@@ -1,9 +1,13 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Invoice } from "../invoice/invoice.entity";
 
 @Entity()
 export class InvoiceStatus {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToMany(() => Invoice, invoice => invoice.invoice_status)
+  invoices: Invoice[]
 
   @Column()
   name: string;

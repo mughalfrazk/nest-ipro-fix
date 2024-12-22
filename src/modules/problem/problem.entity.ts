@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Issue } from "../issue/issue.entity";
 import { Company } from "../company/company.entity";
+import { InvoiceItem } from "../invoice-item/invoice-item.entity";
 
 @Entity()
 export class Problem {
@@ -12,6 +13,9 @@ export class Problem {
 
   @OneToMany(() => Issue, issue => issue.problem)
   issues: Issue[]
+  
+  @OneToMany(() => InvoiceItem, invoice_item => invoice_item.problem)
+  invoice_items: InvoiceItem[]
 
   @Column()
   name: string;

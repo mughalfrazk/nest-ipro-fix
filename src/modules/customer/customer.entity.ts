@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Job } from "../job/job.entity";
 import { Company } from "../company/company.entity";
+import { Invoice } from "../invoice/invoice.entity";
 
 @Entity()
 export class Customer {
@@ -9,6 +10,9 @@ export class Customer {
 
   @OneToMany(() => Job, job => job.customer)
   jobs: Job[]
+
+  @OneToMany(() => Invoice, invoice => invoice.customer)
+  invoices: Invoice[]
 
   @Column()
   name: string;
