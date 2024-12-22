@@ -19,7 +19,7 @@ export class JobService {
       },
       relations: [
         "customer",
-        "technician",
+        "technician.role",
         "job_status",
         "issues.brand",
         "issues.model",

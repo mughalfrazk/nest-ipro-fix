@@ -7,6 +7,7 @@ import { Brand } from "../brand/brand.entity";
 import { Model } from "../model/model.entity";
 import { Part } from "../part/part.entity";
 import { Problem } from "../problem/problem.entity";
+import { Invoice } from "../invoice/invoice.entity";
 
 @Entity()
 export class Company {
@@ -36,6 +37,9 @@ export class Company {
   
   @OneToMany(() => Problem, problem => problem.company)
   problems: Problem[]
+
+  @OneToMany(() => Invoice, problem => problem.company)
+  invoices: Invoice[]
 
   @Column()
   name: string;

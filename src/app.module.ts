@@ -41,6 +41,10 @@ import { Comment } from './modules/comment/comment.entity';
 import { CommentModule } from './modules/comment/comment.module';
 import { InvoiceStatus } from './modules/invoice-status/invoice-status.entity';
 import { InvoiceStatusModule } from './modules/invoice-status/invoice-status.module';
+import { Invoice } from './modules/invoice/invoice.entity';
+import { InvoiceModule } from './modules/invoice/invoice.module';
+import { InvoiceItem } from './modules/invoice-item/invoice-item.entity';
+import { InvoiceItemModule } from './modules/invoice-item/invoice-item.module';
 
 @Module({
   imports: [
@@ -74,7 +78,9 @@ import { InvoiceStatusModule } from './modules/invoice-status/invoice-status.mod
           ExpenseType,
           Expense,
           Comment,
-          InvoiceStatus
+          InvoiceStatus,
+          Invoice,
+          InvoiceItem
         ],
         namingStrategy: new SnakeNamingStrategy()
       })
@@ -97,7 +103,9 @@ import { InvoiceStatusModule } from './modules/invoice-status/invoice-status.mod
     ExpenseTypeModule,
     ExpenseModule,
     CommentModule,
-    InvoiceStatusModule
+    InvoiceStatusModule,
+    InvoiceModule,
+    InvoiceItemModule
   ],
   providers: [AppService]
 })

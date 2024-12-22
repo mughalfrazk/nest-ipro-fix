@@ -6,6 +6,7 @@ import { Job } from "../job/job.entity";
 import { ProblemType } from "../problem-type/problem-type.entity";
 import { Expense } from "../expense/expense.entity";
 import { Comment } from "../comment/comment.entity";
+import { Invoice } from "../invoice/invoice.entity";
 
 @Entity()
 export class Users {
@@ -29,6 +30,9 @@ export class Users {
 
   @OneToMany(() => Comment, comment => comment.created_by)
   comments: Comment[]
+
+  @OneToMany(() => Invoice, invoice => invoice.created_by)
+  invoices: Invoice[]
 
   @Column({ nullable: true })
   target: number;
