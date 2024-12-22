@@ -6,7 +6,6 @@ import { InvoiceService } from "./invoice.service";
 import { CreateInvoiceDto } from "./dto/create-invoice.dto";
 import { Users } from "@/modules/users/users.entity";
 import { InvoiceStatusService } from "../invoice-status/invoice-status.service";
-import { InvoiceItem } from "../invoice-item/invoice-item.entity";
 import { JobStatusService } from "../job-status/job-status.service";
 import { JobService } from "../job/job.service";
 
@@ -39,7 +38,7 @@ export class InvoiceController {
       invoice_status: invoice.invoice_status,
       created_by: invoice.created_by
     }
-    structured_invoice["issues"] = invoice.invoice_items.filter(item => item.item_type === "ٰissue")
+    structured_invoice["issues"] = invoice.invoice_items.filter(item => item.item_type === "issue")
     structured_invoice["purchases"] = invoice.invoice_items.filter(item => item.item_type === "purchase")
 
     structured_invoice["issues"] = structured_invoice["issues"].map(item => ({
@@ -79,8 +78,37 @@ export class InvoiceController {
     return structured_invoice
   }
 
+  @Get("all")
+  async getAllCompanyInvoices(@Query("stats") stats: number, @AuthUser() { company }: Users) {
+    const invoices = await this.invoiceService.findAll(company.id)
+
+    const responses: { invoices: typeof invoices, stats?: { total_invoices: number, total_amount: number, total_pending: number, total_paid: number } } = {
+      invoices,
+      stats: {
+        total_invoices: 0,
+        total_amount: 0,
+        total_pending: 0,
+        total_paid: 0
+      }
+    }
+
+    if (!!stats && !!invoices.length) {
+      responses["stats"] = {
+        total_invoices: invoices.length,
+        total_amount: invoices.reduce((prev, curr) => prev + curr.total, 0),
+        total_pending: invoices.reduce((prev, curr) => curr.invoice_status.name === "Pending Payment" ? prev + 1 : prev, 0),
+        total_paid: invoices.reduce((prev, curr) => curr.invoice_status.name === "Paid" ? prev + 1 : prev, 0)
+      }
+    }
+
+    return responses
+  }
+
   @Post()
   async create(@Body() body: CreateInvoiceDto, @AuthUser() user: Users) {
+    const invoice = await this.invoiceService.findByJobId(body.job_id, user.company.id)
+    if (!!invoice) throw new BadRequestException("Invoice already generated.")
+
     const jobStatus = await this.jobStatusService.findByName("Job Done")
 
     const job = await this.jobService.findById(body.job_id, user.company.id)

@@ -39,7 +39,7 @@ export class JobService {
   }
 
   async getAllCompanyJobs(company_id: string) {
-    return this.repo.find({ select: ["id", "customer", "created_at", "updated_at"], where: { company: { id: company_id }, deleted_at: IsNull() }, relations: ["customer", "technician", "job_status", "issues", "problem_type"] })
+    return this.repo.find({ select: ["id", "customer", "created_at", "updated_at"], where: { company: { id: company_id }, deleted_at: IsNull() }, relations: ["customer", "technician", "job_status", "issues", "problem_type"], order: { created_at: "ASC" } })
   }
 
   async create(payload: CreateJobDto, job_status_id: number, company_id: string) {
