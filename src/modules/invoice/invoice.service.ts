@@ -11,7 +11,17 @@ export class InvoiceService {
   constructor(@InjectRepository(Invoice) private repo: Repository<Invoice>) { }
 
   async findAll(company_id: string) {
-    return this.repo.find({ where: { company: { id: company_id }, deleted_at: IsNull() }, relations: ["expense_type", "created_by"] })
+    const invoices = await this.repo.find({ select: ["id", "created_at", "customer", "total", "invoice_status", "purchase_total"], where: { company: { id: company_id }, deleted_at: IsNull() }, relations: ["customer", "invoice_status", "invoice_items"], order: { created_at: "ASC" } })
+
+    return invoices.map(({ id, total, created_at, customer, invoice_status, invoice_items, purchase_total }) => ({
+      id,
+      total,
+      created_at,
+      customer,
+      invoice_status,
+      devices_qty: invoice_items.reduce((prev, curr) => curr.item_type === "issue" ? prev + curr.quantity : prev, 0),
+      purchase_total,
+    }))
   }
 
   async findByJobId(job_id: string, company_id: string) {
