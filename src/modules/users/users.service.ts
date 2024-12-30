@@ -9,6 +9,10 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 export class UsersService {
   constructor(@InjectRepository(Users) private repo: Repository<Users>) { }
 
+  async findAllUsers(company_id: string) {
+    return this.repo.find({ where: { company: { id: company_id } }, relations: ["role"] })
+  }
+
   async findByRoleAndSpeciality(company_id: string, role_id?: string, speciality_id?: string): Promise<Users[]> {
     let where: FindOptionsWhere<Users> = {};
     where.company = { id: company_id, deleted_at: IsNull() }
@@ -53,7 +57,7 @@ export class UsersService {
 
   async create(user: SignUpDto, company_id: string) {
     const { first_name, last_name, email, password, target, progress, phone, address, role_id, speciality_id } = user
-    console.log(user)
+
     const entity = this.repo.create({
       first_name,
       last_name,
@@ -76,7 +80,7 @@ export class UsersService {
     const payload: Partial<Users> = {
       first_name, last_name, target: +target, phone, progress: +progress, address
     }
-    
+
     const entity = this.repo.findOne({ where: { id } })
     return this.repo.save({ ...entity, ...payload })
   }

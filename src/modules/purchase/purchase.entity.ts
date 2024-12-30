@@ -1,8 +1,9 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Job } from "../job/job.entity";
 import { Model } from "../model/model.entity";
 import { Part } from "../part/part.entity";
 import { Supplier } from "../supplier/supplier.entity";
+import { Expense } from "../expense/expense.entity";
 
 @Entity()
 export class Purchase {
@@ -32,6 +33,10 @@ export class Purchase {
 
   @Column({ type: "uuid" })
   supplier_id: number;
+
+  @OneToOne(() => Expense, invoice => invoice.purchase, { nullable: false, cascade: ["insert"] })
+  @JoinColumn({ name: "id" })
+  expense: Expense
 
   @Column()
   quantity: number;

@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsOptional, IsString } from "class-validator";
 
 export class CreateExpenseType {
   @IsString()
@@ -7,4 +7,8 @@ export class CreateExpenseType {
   @IsString()
   @IsOptional()
   description: string;
+
+  @IsBoolean()
+  @IsOptional()
+  is_purchase: boolean;
 }

@@ -19,19 +19,19 @@ export class CustomerContoller {
   }
 
   @Post()
-  @Roles(["super_admin", "receptionist"])
+  @Roles(["super_admin", "admin", "receptionist"])
   async createCustomer(@Body() body: CreateCustomerDto, @AuthUser() user: Users) {
     return this.customerService.create(body, user.company.id)
   }
 
   @Patch(":id")
-  @Roles(["super_admin", "admin"])
+  @Roles(["super_admin", "admin", "receptionist"])
   async update(@Param("id") id: string, @Body() body: UpdateCustomerDto, @AuthUser() { company }: Users) {
     const entity = await this.customerService.findById(id);
     if (!entity) throw new BadRequestException("Customer not found.")
 
     if (body.name === "") throw new BadRequestException("Name is required.")
-      if (body.name.toLowerCase() === entity.name.toLowerCase()) throw new BadRequestException("Customer already exists.")
+    if (body.name.toLowerCase() === entity.name.toLowerCase()) throw new BadRequestException("Customer already exists.")
 
     return this.customerService.update(id, body)
   }

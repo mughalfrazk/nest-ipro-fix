@@ -8,6 +8,7 @@ import { Model } from "../model/model.entity";
 import { Part } from "../part/part.entity";
 import { Problem } from "../problem/problem.entity";
 import { Invoice } from "../invoice/invoice.entity";
+import { Expense } from "../expense/expense.entity";
 
 @Entity()
 export class Company {
@@ -28,6 +29,9 @@ export class Company {
   
   @OneToMany(() => Brand, brand => brand.company)
   brands: Brand[]
+
+  @OneToMany(() => Expense, expense => expense.company)
+  expenses: Expense[]
   
   @OneToMany(() => Model, model => model.company)
   models: Model[]

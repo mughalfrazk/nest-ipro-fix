@@ -19,6 +19,9 @@ export class ExpenseType {
   @Column({ nullable: true })
   description: string;
 
+  @Column({ default: false })
+  is_purchase: boolean;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',

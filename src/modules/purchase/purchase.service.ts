@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Purchase } from "./purchase.entity";
 import { Repository } from "typeorm";
 import { CreatePurchasesDto } from "./dto/create-purchase.dto";
+import { Users } from "../users/users.entity";
 
 @Injectable()
 export class PurchaseService {
@@ -13,10 +14,10 @@ export class PurchaseService {
   }
 
   async findBySingleJobs(job_id: string) {
-    return this.repo.find({ where: { job: { id: job_id } }})
+    return this.repo.find({ where: { job: { id: job_id } } })
   }
 
-  async createMultiple(payload: CreatePurchasesDto) {
+  async createMultiple(payload: CreatePurchasesDto, expense_type_id: number, user: Users) {
     const { purchases, job_id } = payload;
 
     const entity = purchases.map(({ model_id, supplier_id, part_id, quantity, total }) => this.repo.create({
@@ -25,7 +26,14 @@ export class PurchaseService {
       supplier: { id: supplier_id },
       part: { id: part_id },
       quantity,
-      total
+      total,
+      expense: {
+        amount: total,
+        comments: "",
+        expense_type: { id: expense_type_id },
+        created_by: { id: user.id },
+        company: { id: user.company.id },
+      }
     }))
 
     return this.repo.save(entity)

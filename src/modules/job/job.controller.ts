@@ -22,7 +22,7 @@ export class JobController {
   ) { }
 
   @Get()
-  @Roles(["super_admin", "admin", "technician"])
+  @Roles(["super_admin", "admin", "receptionist", "technician"])
   async getAll(@AuthUser() { company }: Users) {
     return this.jobService.getAllCompanyJobs(company.id)
   }
@@ -40,12 +40,26 @@ export class JobController {
   @Post()
   @Roles(["super_admin", "admin", "receptionist"])
   async createNewJob(@Body() body: CreateJobDto, @AuthUser() { company }: Users) {
+    console.log(body)
     const job_status = await this.jobStatusService.findByName("Device Received")
     if (!job_status) throw new BadRequestException("Job status error")
 
-    if (!body.customer_id) {
+    if (!body.customer_id && body.customer_id !== "new") {
       const customerEntity = await this.customerService.findByNameOrPhone(body.customer.name, body.customer.phone)
       if (customerEntity) throw new BadRequestException("Customer already exist.")
+    }
+
+    body = {
+      ...body,
+      issues: body.issues.map(({ brand_id, charges, model_id, problem_id, quantity, total, job_id }) => ({
+        brand_id,
+        charges,
+        model_id,
+        problem_id,
+        quantity,
+        total,
+        job_id
+      }))
     }
 
     return await this.jobService.create(body, job_status.id, company.id)
@@ -66,7 +80,7 @@ export class JobController {
     // TODO: Can be problematic, because old issues, new issues and job are updating seperatelty and any one might fail while other not.
     newIssues.map(async item => await this.issueService.create(item, id))
     oldIssues.map(async item => await this.issueService.update(item.id, item, id))
-    
+
     return await this.jobService.update(id, body)
   }
 }
