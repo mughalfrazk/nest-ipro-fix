@@ -7,6 +7,7 @@ import { AuthUser } from "src/decorators/auth-user.decorator";
 import { CreateSupplierDto } from "./dto/create-supplier.dto";
 import { Roles } from "src/auth/decorators/roles.decorator";
 import { UpdateSupplierDto } from "./dto/update-supplier.dto";
+import { RoleTypes } from "@/types/roles.types";
 
 @ApiTags("Supplier")
 @Controller("supplier")
@@ -16,14 +17,14 @@ export class SupplierController {
   ) { }
 
   @Get()
-  @Roles(['super_admin', 'admin'])
+  @Roles([RoleTypes.SUPER_ADMIN, RoleTypes.ADMIN, RoleTypes.RECEPTIONIST, RoleTypes.STAFF, RoleTypes.ACCOUNTANT, RoleTypes.TECHNICIAN])
   async getAll(@AuthUser() user: Users) {
     const { company } = user
     return this.supplierService.getAllByCompany(company.id)
   }
 
   @Get("/purchases")
-  @Roles(['super_admin', 'admin'])
+  @Roles([RoleTypes.SUPER_ADMIN, RoleTypes.ADMIN, RoleTypes.ACCOUNTANT])
   async getAllPurchasesBySupplier(@AuthUser() { company }: Users) {
     return this.supplierService.findAllPurchasesBySupplier(company.id)
   }

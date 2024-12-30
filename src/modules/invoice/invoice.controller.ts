@@ -8,6 +8,8 @@ import { Users } from "@/modules/users/users.entity";
 import { InvoiceStatusService } from "../invoice-status/invoice-status.service";
 import { JobStatusService } from "../job-status/job-status.service";
 import { JobService } from "../job/job.service";
+import { Roles } from "@/auth/decorators/roles.decorator";
+import { RoleTypes } from "@/types/roles.types";
 
 @ApiTags("Invoice")
 @Controller("invoice")
@@ -20,6 +22,7 @@ export class InvoiceController {
   ) { }
 
   @Get()
+  @Roles([RoleTypes.SUPER_ADMIN, RoleTypes.ADMIN, RoleTypes.RECEPTIONIST, RoleTypes.ACCOUNTANT, RoleTypes.TECHNICIAN])
   async getInvoiceByJobId(@Query("job_id") job_id: string, @AuthUser() { company }: Users) {
     const invoice = await this.invoiceService.findByJobId(job_id, company.id)
     if (!invoice) return null
@@ -79,6 +82,7 @@ export class InvoiceController {
   }
 
   @Get("all")
+  @Roles([RoleTypes.SUPER_ADMIN, RoleTypes.ADMIN, RoleTypes.ACCOUNTANT])
   async getAllCompanyInvoices(@Query("stats") stats: number, @AuthUser() { company }: Users) {
     const invoices = await this.invoiceService.findAll(company.id)
 
@@ -105,6 +109,7 @@ export class InvoiceController {
   }
 
   @Post()
+  @Roles([RoleTypes.SUPER_ADMIN, RoleTypes.ADMIN, RoleTypes.RECEPTIONIST, RoleTypes.ACCOUNTANT, RoleTypes.TECHNICIAN])
   async create(@Body() body: CreateInvoiceDto, @AuthUser() user: Users) {
     const invoice = await this.invoiceService.findByJobId(body.job_id, user.company.id)
     if (!!invoice) throw new BadRequestException("Invoice already generated.")
