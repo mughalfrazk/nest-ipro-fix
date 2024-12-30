@@ -6,6 +6,7 @@ import { CreatePurchasesDto } from "./dto/create-purchase.dto";
 import { ExpenseTypeService } from "../expense-type/expense-type.service";
 import { AuthUser } from "@/decorators/auth-user.decorator";
 import { Users } from "../users/users.entity";
+import { RoleTypes } from "@/types/roles.types";
 
 @Controller("purchase")
 export class PurchaseController {
@@ -23,7 +24,7 @@ export class PurchaseController {
   }
 
   @Post()
-  @Roles(["super_admin", "admin"])
+  @Roles([RoleTypes.SUPER_ADMIN, RoleTypes.ADMIN, RoleTypes.RECEPTIONIST, RoleTypes.ACCOUNTANT, RoleTypes.TECHNICIAN])
   async createMultiplePurchase(@Body() body: CreatePurchasesDto, @AuthUser() user: Users) {
     let expenseTypeEntity = await this.expenseTypeService.getPurchaseExpenseType()
     if (!expenseTypeEntity) {

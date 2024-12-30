@@ -3,5 +3,6 @@ export const RoleTypes = {
   ADMIN: "admin",
   ACCOUNTANT: "accountant",
   RECEPTIONIST: "receptionist",
+  STAFF: "staff",
   TECHNICIAN: "technician"
 }

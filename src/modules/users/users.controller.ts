@@ -17,14 +17,13 @@ export class UsersController {
   ) { }
 
   @Get()
-  @Roles(["super_admin", "admin"])
   async getAllCompanyUserByRole(@Query("role_id") role_id: string, @Query("speciality_id") speciality_id: string, @AuthUser() { company }: Users) {
     const users = await this.usersService.findByRoleAndSpecialityWithJobs(company.id, role_id, speciality_id)
     return users.map(user => ({ ...user, jobs: user.jobs.reduce(prev => prev + 1, 0) }))
   }
 
   @Get("/technician")
-  @Roles(["super_admin", "admin", "receptionist"])
+  @Roles([RoleTypes.ADMIN, RoleTypes.RECEPTIONIST, RoleTypes.STAFF])
   async getTechnicians(@Query("speciality_id") speciality_id: string, @AuthUser() { company }) {
     const role = await this.roleService.findByName(RoleTypes.TECHNICIAN)
     if (!role) {
@@ -36,7 +35,7 @@ export class UsersController {
 
   @Get(":id")
   @ApiParam({ name: "id", required: true })
-  @Roles(["admin", "receptionist", "staff"])
+  @Roles([RoleTypes.ADMIN, RoleTypes.RECEPTIONIST, RoleTypes.STAFF])
   async getUserById(@Param("id") id: string) {
     const user = await this.usersService.findById(id)
 
@@ -46,7 +45,7 @@ export class UsersController {
 
   @Patch(":id")
   @ApiParam({ name: "id", required: true })
-  @Roles(["admin", "receptionist", "staff"])
+  @Roles([RoleTypes.ADMIN, RoleTypes.RECEPTIONIST, RoleTypes.STAFF])
   async updateUserProfile(@Param("id") id: string, body: UpdateUserDto) {
     const user = await this.usersService.findById(id)
     if (!user) throw new BadRequestException("User not found.")

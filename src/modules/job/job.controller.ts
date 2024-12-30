@@ -10,6 +10,7 @@ import { JobStatusService } from "../job-status/job-status.service";
 import { CustomerService } from "../customer/customer.service";
 import { UpdateJobDto } from "./dto/update-job.dto";
 import { IssueService } from "../issue/issue.service";
+import { RoleTypes } from "@/types/roles.types";
 
 @ApiTags("Job")
 @Controller("job")
@@ -22,14 +23,18 @@ export class JobController {
   ) { }
 
   @Get()
-  @Roles(["super_admin", "admin", "receptionist", "technician"])
-  async getAll(@AuthUser() { company }: Users) {
-    return this.jobService.getAllCompanyJobs(company.id)
+  @Roles([RoleTypes.SUPER_ADMIN, RoleTypes.ADMIN, RoleTypes.RECEPTIONIST, RoleTypes.TECHNICIAN, RoleTypes.STAFF])
+  async getAll(@AuthUser() user: Users) {
+    if (user.role.name !== RoleTypes.SUPER_ADMIN && user.role.name !== RoleTypes.ADMIN) {
+      return this.jobService.getAllCompanyJobs(user.company.id, user.id)
+    }
+
+    return this.jobService.getAllCompanyJobs(user.company.id)
   }
 
   @Get(":id")
   @ApiParam({ name: "id", required: true })
-  @Roles(["super_admin", "admin", "receptionist"])
+  @Roles([RoleTypes.SUPER_ADMIN, RoleTypes.ADMIN, RoleTypes.RECEPTIONIST, RoleTypes.TECHNICIAN, RoleTypes.STAFF])
   async getJobById(@Param("id") id: string, @AuthUser() { company }: Users) {
     const job = await this.jobService.findById(id, company.id)
     if (!job) throw new BadRequestException("Job not found.")
@@ -38,9 +43,8 @@ export class JobController {
   }
 
   @Post()
-  @Roles(["super_admin", "admin", "receptionist"])
-  async createNewJob(@Body() body: CreateJobDto, @AuthUser() { company }: Users) {
-    console.log(body)
+  @Roles([RoleTypes.SUPER_ADMIN, RoleTypes.ADMIN, RoleTypes.RECEPTIONIST])
+  async createNewJob(@Body() body: CreateJobDto, @AuthUser() user: Users) {
     const job_status = await this.jobStatusService.findByName("Device Received")
     if (!job_status) throw new BadRequestException("Job status error")
 
@@ -62,17 +66,18 @@ export class JobController {
       }))
     }
 
-    return await this.jobService.create(body, job_status.id, company.id)
+    if (!body.technician_id) body.technician_id = user.id
+    return await this.jobService.create(body, job_status.id, user.company.id)
   }
 
   @Patch(":id")
-  @Roles(["super_admin", "admin", "receptionist"])
+  @Roles([RoleTypes.SUPER_ADMIN, RoleTypes.ADMIN, RoleTypes.RECEPTIONIST, RoleTypes.TECHNICIAN])
   async updateJob(@Param("id") id: string, @Body() body: UpdateJobDto, @AuthUser() { company }: Users) {
     const selectedJob = await this.jobService.findById(id, company.id)
     if (!selectedJob) throw new BadRequestException("Job does not exist.")
 
-    const jobStatusEntity = await this.jobStatusService.findByName("Job Done")
-    if (jobStatusEntity.id === selectedJob.job_status.id) throw new BadRequestException("Job cannot be updated after its done.")
+    // const jobStatusEntity = await this.jobStatusService.findByName("Job Done")
+    // if (jobStatusEntity.id === selectedJob.job_status.id) throw new BadRequestException("Job cannot be updated after its done.")
 
     const newIssues = body.issues.filter(item => item.id === "new")
     const oldIssues = body.issues.filter(item => item.id !== "new")

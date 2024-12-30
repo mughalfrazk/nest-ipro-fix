@@ -38,10 +38,16 @@ export class JobService {
     })
   }
 
-  async getAllCompanyJobs(company_id: string) {
+  async getAllCompanyJobs(company_id: string, user_id?: string | undefined) {
+    let where = { company: { id: company_id }, deleted_at: IsNull() }
+
+    if (user_id) {
+      where["technician"] = { id: user_id }
+    }
+
     return this.repo.find({
       select: ["id", "customer", "created_at", "updated_at"],
-      where: { company: { id: company_id }, deleted_at: IsNull() },
+      where,
       relations: ["customer", "technician.role", "job_status", "issues", "problem_type"],
       order: { created_at: "ASC" }
     })
