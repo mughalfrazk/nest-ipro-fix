@@ -6,6 +6,7 @@ import { AuthUser } from "@/decorators/auth-user.decorator";
 import { Roles } from "@/auth/decorators/roles.decorator";
 import { RoleService } from "../role/role.service";
 import { RoleTypes } from "@/types/roles.types";
+import { Users } from "./users.entity";
 
 @ApiTags("Users")
 @Controller("user")
@@ -17,7 +18,7 @@ export class UsersController {
 
   @Get()
   @Roles(["super_admin", "admin"])
-  async getByRole(@Query("role_id") role_id: string, @Query("speciality_id") speciality_id: string, @AuthUser() { company }) {
+  async getAllCompanyUserByRole(@Query("role_id") role_id: string, @Query("speciality_id") speciality_id: string, @AuthUser() { company }: Users) {
     const users = await this.usersService.findByRoleAndSpecialityWithJobs(company.id, role_id, speciality_id)
     return users.map(user => ({ ...user, jobs: user.jobs.reduce(prev => prev + 1, 0) }))
   }

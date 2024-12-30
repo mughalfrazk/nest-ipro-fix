@@ -1,6 +1,9 @@
 import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateIssueDto {
+  @IsOptional()
+  id?: string;
+
   @IsNumber()
   problem_id: number;
 
